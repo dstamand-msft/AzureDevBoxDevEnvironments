@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "projects_AppDev_Team_name": {
+            "value": null
+        },
+        "virtualNetworks_DevBox_Vnet_name": {
+            "value": null
+        },
+        "devcenters_DevBox_GoC_Demo_name": {
+            "value": null
+        },
+        "networkconnections_DevBox_NetConnection_name": {
+            "value": null
+        }
+    }
+}

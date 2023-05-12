@@ -1,0 +1,216 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "projects_AppDev_Team_name": {
+            "defaultValue": "AppDev-Team",
+            "type": "String"
+        },
+        "virtualNetworks_DevBox_Vnet_name": {
+            "defaultValue": "DevBox-Vnet",
+            "type": "String"
+        },
+        "devcenters_DevBox_GoC_Demo_name": {
+            "defaultValue": "DevBox-GoC-Demo",
+            "type": "String"
+        },
+        "networkconnections_DevBox_NetConnection_name": {
+            "defaultValue": "DevBox-NetConnection",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.DevCenter/devcenters",
+            "apiVersion": "2023-01-01-preview",
+            "name": "[parameters('devcenters_DevBox_GoC_Demo_name')]",
+            "location": "canadacentral",
+            "identity": {
+                "type": "None"
+            },
+            "properties": {
+                "devCenterUri": "https://45fd14d7-3ebe-4b08-ab88-91282e9c2178-devbox-goc-demo.canadacentral.devcenter.azure.com/"
+            }
+        },
+        {
+            "type": "Microsoft.DevCenter/devcenters/galleries",
+            "apiVersion": "2023-01-01-preview",
+            "name": "[concat(parameters('devcenters_DevBox_GoC_Demo_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DevCenter/devcenters', parameters('devcenters_DevBox_GoC_Demo_name'))]"
+            ],
+            "properties": {
+                "galleryResourceId": "[resourceId('Microsoft.DevCenter/devcenters/galleries', parameters('devcenters_DevBox_GoC_Demo_name'), 'Default')]"
+            }
+        },
+        {
+            "type": "Microsoft.DevCenter/networkconnections",
+            "apiVersion": "2023-01-01-preview",
+            "name": "[parameters('networkconnections_DevBox_NetConnection_name')]",
+            "location": "canadacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_DevBox_Vnet_name'), 'default')]"
+            ],
+            "properties": {
+                "domainJoinType": "AzureADJoin",
+                "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_DevBox_Vnet_name'), 'default')]",
+                "networkingResourceGroupName": "[concat('NI_', parameters('networkconnections_DevBox_NetConnection_name'), '_canadacentral')]"
+            }
+        },
+        {
+            "type": "Microsoft.DevCenter/projects",
+            "apiVersion": "2023-01-01-preview",
+            "name": "[parameters('projects_AppDev_Team_name')]",
+            "location": "canadacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.DevCenter/devcenters', parameters('devcenters_DevBox_GoC_Demo_name'))]"
+            ],
+            "properties": {
+                "devCenterId": "[resourceId('Microsoft.DevCenter/devcenters', parameters('devcenters_DevBox_GoC_Demo_name'))]",
+                "devCenterUri": "https://45fd14d7-3ebe-4b08-ab88-91282e9c2178-devbox-goc-demo.canadacentral.devcenter.azure.com/"
+            }
+        },
+        {
+            "type": "Microsoft.DevCenter/projects/pools",
+            "apiVersion": "2023-01-01-preview",
+            "name": "[concat(parameters('projects_AppDev_Team_name'), '/ASP.Net-Dev-Standard')]",
+            "location": "canadacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.DevCenter/projects', parameters('projects_AppDev_Team_name'))]"
+            ],
+            "properties": {
+                "devBoxDefinitionName": "ASP.Net-Dev-Std",
+                "networkConnectionName": "DevBox-NetConnection",
+                "licenseType": "Windows_Client",
+                "localAdministrator": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.DevCenter/projects/pools",
+            "apiVersion": "2023-01-01-preview",
+            "name": "[concat(parameters('projects_AppDev_Team_name'), '/QA-Std')]",
+            "location": "canadacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.DevCenter/projects', parameters('projects_AppDev_Team_name'))]"
+            ],
+            "properties": {
+                "devBoxDefinitionName": "QA-Std",
+                "networkConnectionName": "DevBox-NetConnection",
+                "licenseType": "Windows_Client",
+                "localAdministrator": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2022-11-01",
+            "name": "[parameters('virtualNetworks_DevBox_Vnet_name')]",
+            "location": "canadacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_DevBox_Vnet_name'), 'default')]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "default",
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_DevBox_Vnet_name'), 'default')]",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/24",
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2022-11-01",
+            "name": "[concat(parameters('virtualNetworks_DevBox_Vnet_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_DevBox_Vnet_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.0.0.0/24",
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.DevCenter/devcenters/attachednetworks",
+            "apiVersion": "2023-01-01-preview",
+            "name": "[concat(parameters('devcenters_DevBox_GoC_Demo_name'), '/DevBox-NetConnection')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DevCenter/devcenters', parameters('devcenters_DevBox_GoC_Demo_name'))]",
+                "[resourceId('Microsoft.DevCenter/networkconnections', parameters('networkconnections_DevBox_NetConnection_name'))]"
+            ],
+            "properties": {
+                "networkConnectionId": "[resourceId('Microsoft.DevCenter/networkconnections', parameters('networkconnections_DevBox_NetConnection_name'))]"
+            }
+        },
+        {
+            "type": "Microsoft.DevCenter/devcenters/devboxdefinitions",
+            "apiVersion": "2023-01-01-preview",
+            "name": "[concat(parameters('devcenters_DevBox_GoC_Demo_name'), '/ASP.Net-Dev-Std')]",
+            "location": "canadacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.DevCenter/devcenters', parameters('devcenters_DevBox_GoC_Demo_name'))]",
+                "[resourceId('Microsoft.DevCenter/devcenters/galleries', parameters('devcenters_DevBox_GoC_Demo_name'), 'Default')]"
+            ],
+            "properties": {
+                "imageReference": {
+                    "id": "[concat(resourceId('Microsoft.DevCenter/devcenters/galleries', parameters('devcenters_DevBox_GoC_Demo_name'), 'Default'), '/images/microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2')]"
+                },
+                "sku": {
+                    "name": "general_a_8c32gb_v1"
+                },
+                "osStorageType": "ssd_256gb"
+            }
+        },
+        {
+            "type": "Microsoft.DevCenter/devcenters/devboxdefinitions",
+            "apiVersion": "2023-01-01-preview",
+            "name": "[concat(parameters('devcenters_DevBox_GoC_Demo_name'), '/QA-Std')]",
+            "location": "canadacentral",
+            "dependsOn": [
+                "[resourceId('Microsoft.DevCenter/devcenters', parameters('devcenters_DevBox_GoC_Demo_name'))]",
+                "[resourceId('Microsoft.DevCenter/devcenters/galleries', parameters('devcenters_DevBox_GoC_Demo_name'), 'Default')]"
+            ],
+            "properties": {
+                "imageReference": {
+                    "id": "[concat(resourceId('Microsoft.DevCenter/devcenters/galleries', parameters('devcenters_DevBox_GoC_Demo_name'), 'Default'), '/images/microsoftwindowsdesktop_windows-ent-cpc_win11-21h2-ent-cpc-os')]"
+                },
+                "sku": {
+                    "name": "general_a_8c32gb_v1"
+                },
+                "osStorageType": "ssd_256gb"
+            }
+        },
+        {
+            "type": "Microsoft.DevCenter/projects/pools/schedules",
+            "apiVersion": "2023-01-01-preview",
+            "name": "[concat(parameters('projects_AppDev_Team_name'), '/QA-Std/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DevCenter/projects/pools', parameters('projects_AppDev_Team_name'), 'QA-Std')]",
+                "[resourceId('Microsoft.DevCenter/projects', parameters('projects_AppDev_Team_name'))]"
+            ],
+            "properties": {
+                "type": "StopDevBox",
+                "frequency": "Daily",
+                "time": "19:00",
+                "timeZone": "America/Toronto",
+                "state": "Enabled"
+            }
+        }
+    ]
+}
