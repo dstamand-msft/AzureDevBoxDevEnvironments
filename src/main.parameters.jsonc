@@ -2,5 +2,23 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "environmentName": {
+            "value": "demodevboxdom"
+        },
+        "location": {
+            "value": "canadacentral"
+        },
+        "resourceGroupName": {
+            "value": "rg-demodevbox"
+        },
+        "deployVnet": {
+            "value": false
+        },
+        "devboxRbac": {
+            "value": {
+                "principalId": "9c58a712-948a-4f95-a1bc-b2a77c4cd519",
+                "roleType": "Group"
+            }
+        }
     }
 }
