@@ -1,3 +1,3 @@
 # Dev Box and Dev Environments
 
-![image](https://github.com/dstamand-msft/AzureDevBoxDevEnvironments/media/DevBox-Creation.png)
+![image](https://github.com/dstamand-msft/AzureDevBoxDevEnvironments/blob/main/media/DevBox-Creation.png)
