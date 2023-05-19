@@ -5,37 +5,65 @@ param tags object = {}
 param projectName string
 param vNetName string
 param subnetName string = 'default'
+param environmentTypes array = ['QualityInsurance', 'Development']
 
-resource devBox 'Microsoft.DevCenter/devcenters@2023-01-01-preview' = {
+resource devCenter 'Microsoft.DevCenter/devcenters@2023-01-01-preview' = {
   name: name
   location: location
   tags: tags
   properties: {}
-}
-
-resource attachednetworks 'Microsoft.DevCenter/devcenters/attachednetworks@2023-01-01-preview'= {
-  parent: devBox
-  name: '${devBox.name}-NetConnection'
-  properties: {
-    networkConnectionId: devBoxNetworkConnection.id
+  identity: {
+    type: 'SystemAssigned'
   }
 }
 
-resource devBoxProjects 'Microsoft.DevCenter/projects@2023-01-01-preview' = {
+resource devCenterEnvironment 'Microsoft.DevCenter/devcenters/environmentTypes@2023-01-01-preview' = [for envType in environmentTypes : {
+  parent: devCenter
+  name: envType
+  properties: {}
+}]
+
+resource attachednetworks 'Microsoft.DevCenter/devcenters/attachednetworks@2023-01-01-preview'= {
+  parent: devCenter
+  name: '${devCenter.name}-NetConnection'
+  properties: {
+    networkConnectionId: devCenterNetworkConnection.id
+  }
+}
+
+resource devCenterProject 'Microsoft.DevCenter/projects@2023-01-01-preview' = {
   name: projectName
   location: location
   properties: {
-    devCenterId: devBox.id
+    devCenterId: devCenter.id
   }
 }
 
-resource devBoxNetworkConnection 'Microsoft.DevCenter/networkConnections@2023-01-01-preview' = {
-  name: '${devBox.name}-NetConnection'
+resource projectXEnvironmentType 'Microsoft.DevCenter/projects/environmentTypes@2023-01-01-preview' = [for envType in environmentTypes : {
+  parent: devCenterProject
+  name: envType
+  properties: {
+    deploymentTargetId: subscription().id
+    status: 'Enabled'
+    creatorRoleAssignment:{
+      roles: {
+        // reader role
+        'acdd72a7-3385-48ef-bd42-f606fba81ae7': {}
+      }
+    }
+  }
+  identity: {
+    type: 'SystemAssigned'
+  }
+}]
+
+resource devCenterNetworkConnection 'Microsoft.DevCenter/networkConnections@2023-01-01-preview' = {
+  name: '${devCenter.name}-NetConnection'
   location: location
   properties: {
     domainJoinType: 'AzureADJoin'
     subnetId: subnet.id
-    networkingResourceGroupName: 'NI_${devBox.name}-NetConnection_${toLower(location)}'
+    networkingResourceGroupName: 'NI_${devCenter.name}-NetConnection_${toLower(location)}'
   }
 }
 
@@ -48,6 +76,7 @@ resource subnet 'Microsoft.Network/virtualNetworks/subnets@2022-11-01' existing 
   parent: vNet
 }
 
-output name string = devBox.name
-output networkConnectionName string = devBoxNetworkConnection.name
-output projectName string = devBoxProjects.name
+output name string = devCenter.name
+output networkConnectionName string = devCenterNetworkConnection.name
+output projectName string = devCenterProject.name
+output identityPrincipalId string = devCenter.identity.principalId

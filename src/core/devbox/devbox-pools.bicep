@@ -4,12 +4,12 @@ param devBoxProjectName string
 param devBoxNetworkConnectionName string
 param poolNames array
 
-resource devBoxProject 'Microsoft.DevCenter/projects@2023-01-01-preview' existing = {
+resource devCenterProject 'Microsoft.DevCenter/projects@2023-01-01-preview' existing = {
   name: devBoxProjectName
 }
 
 resource pools 'Microsoft.DevCenter/projects/pools@2023-01-01-preview' = [for item in poolNames: {
-  parent: devBoxProject
+  parent: devCenterProject
   name: item.name
   location: location
   properties: {

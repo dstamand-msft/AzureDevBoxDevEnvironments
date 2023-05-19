@@ -7,17 +7,17 @@ param machinesVMImageName string = 'microsoftvisualstudio_visualstudioplustools_
 var defaultMachineSku = 'general_a_8c32gb_v1'
 var defaultMachineStorage = 'ssd_256gb'
 
-resource devBox 'Microsoft.DevCenter/devcenters@2023-01-01-preview' existing = {
+resource devCenter 'Microsoft.DevCenter/devcenters@2023-01-01-preview' existing = {
   name: devBoxName
 }
 
 resource devBoxGallery 'Microsoft.DevCenter/devcenters/galleries@2023-01-01-preview' existing = {
   name: 'Default'
-  parent: devBox
+  parent: devCenter
 }
 
 resource devboxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@2023-01-01-preview' = [for item in definitions: {
-  parent: devBox
+  parent: devCenter
   name: item.name
   location: location
   properties: {

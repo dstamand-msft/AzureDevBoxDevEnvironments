@@ -12,12 +12,21 @@
             "value": "rg-demodevbox"
         },
         "deployVnet": {
-            "value": false
+            "value": true
         },
         "devboxRbac": {
             "value": {
                 "principalId": "9c58a712-948a-4f95-a1bc-b2a77c4cd519",
                 "roleType": "Group"
+            }
+        },
+        "catalog": {
+            "value": {
+                "name": "SampleCatalog",
+                "repositoryType": "gitHub",
+                "uri": "https://github.com/dstamand-msft/AzureDevBoxDevEnvironments",
+                "branch": "main",
+                "path": "/environments"
             }
         }
     }

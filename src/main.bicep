@@ -17,7 +17,14 @@ param deployVnet bool
 @description('The RBAC for the devbox')
 param devboxRbac object
 
+@description('The artifcats catalog to add')
+param catalog object
+
 param vNetName string = ''
+param keyVaultPatSecretUri string = ''
+param keyVaultName string = ''
+@secure()
+param keyVaultPatSecretValue string = ''
 param devBoxName string = ''
 param projectName string = 'Contoso-University'
 param poolNames array = [{name: 'DevPool', enableLocalAdmin: true, schedule: {}, definition: 'DeveloperBox'}, {name: 'QAPool', enableLocalAdmin: false, schedule: {time: '19:00', timeZone: 'America/Toronto'}, definition: 'QABox'}]
@@ -25,6 +32,7 @@ param definitions array = [{name: 'DeveloperBox', sku: '', storage: ''}, {name: 
 
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
+var keyVaultPatSecretName = 'REPO_PAT'
 
 // Organize resources in a resource group
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -42,6 +50,25 @@ module vNet 'core/networking/virtualnetwork.bicep' = {
   }
 }
 
+module keyVault 'core/security/keyvault.bicep' = if (empty(keyVaultPatSecretUri)) {
+  name: 'keyVault'
+  scope: rg
+  params: {
+    name: !empty(keyVaultName) ? keyVaultName : '${abbrs.keyVaultVaults}${resourceToken}'
+    location: location
+  }
+}
+
+module keyVaultSecret 'core/security/keyvault-secret.bicep' = if (empty(keyVaultPatSecretUri)) {
+  name: 'keyVaultPatSecret'
+  scope: rg
+  params: {
+    name: keyVaultPatSecretName
+    keyVaultName: keyVault.outputs.name
+    secretValue: keyVaultPatSecretValue
+  }
+}
+
 module devBox 'core/devbox/devbox.bicep' = {
   name: 'devBox'
   scope: rg
@@ -50,6 +77,16 @@ module devBox 'core/devbox/devbox.bicep' = {
     location: location
     projectName: projectName
     vNetName: vNet.outputs.vNetName
+  }
+}
+
+// Give the DevCenter access to KeyVault
+module keyVaultAccess './core/security/keyvault-access.bicep' = if (empty(keyVaultPatSecretUri)) {
+  name: 'devcenter-keyvault-access'
+  scope: rg
+  params: {
+    keyVaultName: keyVault.outputs.name
+    principalId: devBox.outputs.identityPrincipalId
   }
 }
 
@@ -84,5 +121,19 @@ module devBoxAccess 'core/devbox/devbox-access.bicep' = {
     principalId: devboxRbac.principalId
     roleType: devboxRbac.roleType
     projectName: devBox.outputs.projectName
+  }
+}
+
+module devBoxCatalog 'core/devbox/devbox-catalog.bicep' = {
+  name: 'devBoxCatalog'
+  scope: rg
+  params: {
+    devBoxName: devBox.outputs.name
+    catalogName: catalog.name
+    repositoryType: catalog.repositoryType
+    uri: catalog.uri
+    branch: catalog.branch
+    path: contains(catalog, 'path') ? catalog.path : ''
+    patKeyVaultUri: empty(keyVaultPatSecretUri) ? keyVaultSecret.outputs.secretUri : keyVaultPatSecretUri
   }
 }
