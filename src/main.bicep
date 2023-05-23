@@ -32,7 +32,7 @@ param definitions array = [{name: 'DeveloperBox', sku: '', storage: ''}, {name: 
 
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
-var keyVaultPatSecretName = 'REPO_PAT'
+var keyVaultPatSecretName = 'REPO-PAT'
 
 // Organize resources in a resource group
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {

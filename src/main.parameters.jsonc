@@ -3,31 +3,35 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environmentName": {
-            "value": "demodevboxdom"
+            "value": "**VALUE**"
         },
         "location": {
-            "value": "canadacentral"
+            "value": "**VALUE**"
         },
         "resourceGroupName": {
-            "value": "rg-demodevbox"
+            "value": "**VALUE**"
         },
         "deployVnet": {
             "value": true
         },
         "devboxRbac": {
             "value": {
-                "principalId": "9c58a712-948a-4f95-a1bc-b2a77c4cd519",
-                "roleType": "Group"
+                "principalId": "**VALUE**",
+                "roleType": "**VALUE**"
             }
         },
         "catalog": {
             "value": {
                 "name": "SampleCatalog",
                 "repositoryType": "gitHub",
-                "uri": "https://github.com/dstamand-msft/AzureDevBoxDevEnvironments",
+                "uri": "https://github.com/dstamand-msft/AzureDevBoxDevEnvironments.git",
                 "branch": "main",
                 "path": "/environments"
             }
+        },
+        // should be passed using the secure parameter, if used
+        "keyVaultPatSecretValue": {
+            "value": ""
         }
     }
 }
