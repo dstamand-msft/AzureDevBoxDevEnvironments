@@ -1,0 +1,19 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "eastus"
+        },
+        "imageDefinitionName": {
+            "value": "Win11_Custom_Definition"
+        },
+        "imageDefinitionProperties": {
+            "value": {
+                "publisher": "AzureWindows11Custom",
+                "offer": "MicrosoftWindowsDesktop",
+                "sku": "windows-11"
+            }
+        }
+    }
+}
