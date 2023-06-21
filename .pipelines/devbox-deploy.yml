@@ -9,7 +9,7 @@ steps:
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
     deploymentScope: 'Subscription'
-    # Service connect requires 'Microsoft.Authorization/roleAssignments/write' permissions
+    # Service connection requires 'Microsoft.Authorization/roleAssignments/write' permissions
     azureResourceManagerConnection: 'DevBox-Deploy'
     action: 'Create Or Update Resource Group'
     resourceGroupName: 'rg-DevBox'
