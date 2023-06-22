@@ -25,5 +25,5 @@ New-AzDeployment -Name DevBox -Location EastUS2 -TemplateFile .\src\main.bicep -
     | devboxRbac | GUID/Text | Yes | Provide the principalId and roleType (User or Group) |
 
 3. Open the YAML pipeline located under \.pipelines\devbox-deply.yml and modify the parameters.
-4. As indicated, ensure the Service connection requires **'Microsoft.Authorization/roleAssignments/write'** permissions.
+4. As indicated, ensure the Service connection has **'Microsoft.Authorization/roleAssignments/write'** permissions.
 
