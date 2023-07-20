@@ -28,6 +28,7 @@ param keyVaultPatSecretValue string = ''
 param devBoxName string = ''
 param projectName string = 'Contoso-University'
 param poolNames array = [{name: 'DevPool', enableLocalAdmin: true, schedule: {}, definition: 'DeveloperBox'}, {name: 'QAPool', enableLocalAdmin: false, schedule: {time: '19:00', timeZone: 'America/Toronto'}, definition: 'QABox'}]
+// use az devbox admin sku list for the storage and skus. Sku is the name parameter and storage is the capabilities.value where the name is OsDiskTypes
 param definitions array = [{name: 'DeveloperBox', sku: '', storage: ''}, {name: 'QABox', sku: '', storage: ''}]
 
 var abbrs = loadJsonContent('./abbreviations.json')

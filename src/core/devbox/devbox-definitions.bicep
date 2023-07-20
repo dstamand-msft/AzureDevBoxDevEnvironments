@@ -4,7 +4,7 @@ param devBoxName string
 param definitions array 
 param machinesVMImageName string = 'microsoftvisualstudio_visualstudioplustools_vs-2022-ent-general-win11-m365-gen2'
 
-var defaultMachineSku = 'general_a_8c32gb_v1'
+var defaultMachineSku = 'general_i_8c32gb256ssd_v2'
 var defaultMachineStorage = 'ssd_256gb'
 
 resource devCenter 'Microsoft.DevCenter/devcenters@2023-01-01-preview' existing = {

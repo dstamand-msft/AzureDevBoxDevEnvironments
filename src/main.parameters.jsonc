@@ -32,6 +32,12 @@
         // should be passed using the secure parameter, if used
         "keyVaultPatSecretValue": {
             "value": ""
-        }
+        }/*,
+        "definitions":{
+            "value": [
+                {"name": "DeveloperBox", "sku": "general_i_8c32gb256ssd_v2", "storage": "ssd_256gb"}, 
+                {"name": "QABox", "sku": "general_i_8c32gb256ssd_v2", "storage": "ssd_256gb"}
+            ]
+        }*/
     }
 }
