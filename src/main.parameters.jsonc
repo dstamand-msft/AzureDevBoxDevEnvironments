@@ -3,20 +3,20 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environmentName": {
-            "value": "CTC-DevBox"
+            "value": "**Value**"
         },
         "location": {
-            "value": "eastus"
+            "value": "**Value**"
         },
         "resourceGroupName": {
-            "value": "CTC-DevBoxDemo"
+            "value": "**Value**"
         },
         "deployVnet": {
             "value": true
         },
         "devboxRbac": {
             "value": {
-                "principalId": "bb289c05-9dbe-4946-8e8a-f4b7d092cb3d",
+                "principalId": "**Value**",
                 "roleType": "Group"
             }
         },
