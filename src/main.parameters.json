@@ -3,20 +3,26 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environmentName": {
-            "value": "**Value**"
+            "value": "${AZURE_ENV_NAME}"
         },
         "location": {
-            "value": "**Value**"
+            "value": "${AZURE_LOCATION}"
         },
         "resourceGroupName": {
-            "value": "**Value**"
+            "value": "${AZURE_RESOURCE_GROUP}"
+        },
+        "devBoxName": {
+            "value": "${AZURE_DEVBOX_NAME}"
+        },
+        "projectName": {
+            "value": "${AZURE_DEVBOX_PROJECT_NAME}"
         },
         "deployVnet": {
             "value": true
         },
         "devboxRbac": {
             "value": {
-                "principalId": "**Value**",
+                "principalId": "bb289c05-9dbe-4946-8e8a-f4b7d092cb3d",
                 "roleType": "Group"
             }
         },
@@ -32,6 +38,6 @@
         // should be passed using the secure parameter, if used
         "keyVaultPatSecretValue": {
             "value": ""
-        }
+        }        
     }
 }

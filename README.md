@@ -28,6 +28,9 @@ New-AzDeployment -Name DevBox -Location EastUS2 -TemplateFile .\src\main.bicep -
 4. As indicated, ensure the Service connection has **'Microsoft.Authorization/roleAssignments/write'** permissions.
 
 # Deploy using Azure CLI
-## deploy using Az Cli
+## create DevBox environement using Az Cli
 
-az deployment sub create --location "eastus" --template-file main.bicep --parameters  main.parameters.jsonc --parameters keyVaultPatSecretValue="GitHub_PAT"
+az deployment sub create --name DevBox --location "eastus" --template-file main.bicep --parameters  main.parameters.json --parameters keyVaultPatSecretValue="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"
+
+## delete your DevBox environement
+az deployment sub delete --name DevBox

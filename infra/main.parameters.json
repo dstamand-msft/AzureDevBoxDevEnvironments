@@ -1,0 +1,42 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "resourceGroupName": {
+      "value": "${AZURE_RESOURCE_GROUP}"
+    },
+    "location": {
+      "value": "${AZURE_LOCATION}"
+    },    
+    "keyVaultPatSecretValue": {
+      "value": ""
+    },
+    "devbox"
+    "projectName": {
+      "value": "${AZURE_DEVBOX_PROJECT_NAME}"
+    },
+    "deployVnet": {
+      "value": true
+    },    
+    "devboxRbac": {
+      "value": {
+        "principalId": "bb289c05-9dbe-4946-8e8a-f4b7d092cb3d",
+        "roleType": "Group"
+      }
+    },
+    "catalog": {
+      "value": {
+        "name": "SampleCatalog",
+        "repositoryType": "gitHub",
+        "uri": "https://github.com/Keayoub/AzureDevBoxDevEnvironments.git",        
+        "branch": "main",
+        "path": "/environments"
+      }
+    }
+  }
+}
+
+

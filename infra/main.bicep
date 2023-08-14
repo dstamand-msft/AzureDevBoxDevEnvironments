@@ -24,15 +24,16 @@ param vNetName string = ''
 param keyVaultPatSecretUri string = ''
 param keyVaultName string = ''
 
-@description('The PAT to use for the devbox. If not provided, a secret will be created in the keyvault')
+@description('The secret value for the PAT. If the keyVaultPatSecretUri is provided, this is not needed')
 @secure()
-param keyVaultPatSecretValue string
+param keyVaultPatSecretValue string = ''
 
 param devBoxName string = ''
-param projectName string = ''
+param projectName string = 'demo-project'
 param poolNames array = [{name: 'DevPool', enableLocalAdmin: true, schedule: {}, definition: 'DeveloperBox'}, {name: 'QAPool', enableLocalAdmin: false, schedule: {time: '19:00', timeZone: 'America/Toronto'}, definition: 'QABox'}]
 // use az devbox admin sku list for the storage and skus. Sku is the name parameter and storage is the capabilities.value where the name is OsDiskTypes
 param definitions array = [{name: 'DeveloperBox', sku: '', storage: ''}, {name: 'QABox', sku: '', storage: ''}]
+
 
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
@@ -40,7 +41,7 @@ var keyVaultPatSecretName = 'REPO-PAT'
 
 // Organize resources in a resource group
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: resourceGroupName
+  name: !empty(resourceGroupName) ? resourceGroupName : '${abbrs.resourcesResourceGroups}${environmentName}'
   location: location
 }
 
@@ -79,7 +80,7 @@ module devBox 'core/devbox/devbox.bicep' = {
   params: {
     name: !empty(devBoxName) ? devBoxName : '${abbrs.devbox}${resourceToken}'
     location: location
-    projectName: !empty(projectName) ? projectName : 'dev-proj-${resourceToken}'
+    projectName: !empty(projectName) ? projectName : '${abbrs.devbox}-project'
     vNetName: vNet.outputs.vNetName
     rsToken: resourceToken
   }
@@ -143,11 +144,7 @@ module devBoxCatalog 'core/devbox/devbox-catalog.bicep' = {
   }
 }
 
+
 output AZURE_LOCATION string = location
-output AZURE_TENANT_ID string = tenant().tenantId
 output AZURE_RESOURCE_GROUP string = rg.name
-output AZURE_DEVBOX_NAME string = devBox.outputs.name
-output AZURE_DEVBOX_PROJECT_NAME string = devBox.outputs.projectName
-
-
-
+output AZURE_TENANT_ID string = tenant().tenantId

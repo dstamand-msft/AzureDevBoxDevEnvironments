@@ -23,13 +23,10 @@ param catalog object
 param vNetName string = ''
 param keyVaultPatSecretUri string = ''
 param keyVaultName string = ''
-
-@description('The PAT to use for the devbox. If not provided, a secret will be created in the keyvault')
 @secure()
-param keyVaultPatSecretValue string
-
+param keyVaultPatSecretValue string = ''
 param devBoxName string = ''
-param projectName string = ''
+param projectName string = 'Contoso-Demo'
 param poolNames array = [{name: 'DevPool', enableLocalAdmin: true, schedule: {}, definition: 'DeveloperBox'}, {name: 'QAPool', enableLocalAdmin: false, schedule: {time: '19:00', timeZone: 'America/Toronto'}, definition: 'QABox'}]
 // use az devbox admin sku list for the storage and skus. Sku is the name parameter and storage is the capabilities.value where the name is OsDiskTypes
 param definitions array = [{name: 'DeveloperBox', sku: '', storage: ''}, {name: 'QABox', sku: '', storage: ''}]
@@ -79,7 +76,7 @@ module devBox 'core/devbox/devbox.bicep' = {
   params: {
     name: !empty(devBoxName) ? devBoxName : '${abbrs.devbox}${resourceToken}'
     location: location
-    projectName: !empty(projectName) ? projectName : 'dev-proj-${resourceToken}'
+    projectName: projectName
     vNetName: vNet.outputs.vNetName
     rsToken: resourceToken
   }
@@ -142,12 +139,3 @@ module devBoxCatalog 'core/devbox/devbox-catalog.bicep' = {
     patKeyVaultUri: empty(keyVaultPatSecretUri) ? keyVaultSecret.outputs.secretUri : keyVaultPatSecretUri
   }
 }
-
-output AZURE_LOCATION string = location
-output AZURE_TENANT_ID string = tenant().tenantId
-output AZURE_RESOURCE_GROUP string = rg.name
-output AZURE_DEVBOX_NAME string = devBox.outputs.name
-output AZURE_DEVBOX_PROJECT_NAME string = devBox.outputs.projectName
-
-
-
