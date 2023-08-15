@@ -11,7 +11,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
     sku: { family: 'A', name: 'standard' }
     accessPolicies: []
     enableRbacAuthorization: true
-    enableSoftDelete: true
+    enableSoftDelete: true    
   }
 }
 
