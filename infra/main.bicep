@@ -20,7 +20,7 @@ param devboxRbac object
 @description('The artifcats catalog to add')
 param catalog object
 
-param vNetName string = ''
+param virtualNetworkName string = ''
 param keyVaultPatSecretUri string = ''
 param keyVaultName string = ''
 
@@ -29,7 +29,7 @@ param keyVaultName string = ''
 param keyVaultPatSecretValue string = ''
 
 param devBoxName string = ''
-param projectName string = 'demo-project'
+param projectName string = ''
 param poolNames array = [{name: 'DevPool', enableLocalAdmin: true, schedule: {}, definition: 'DeveloperBox'}, {name: 'QAPool', enableLocalAdmin: false, schedule: {time: '19:00', timeZone: 'America/Toronto'}, definition: 'QABox'}]
 // use az devbox admin sku list for the storage and skus. Sku is the name parameter and storage is the capabilities.value where the name is OsDiskTypes
 param definitions array = [{name: 'DeveloperBox', sku: '', storage: ''}, {name: 'QABox', sku: '', storage: ''}]
@@ -49,7 +49,7 @@ module vNet 'core/networking/virtualnetwork.bicep' = {
   name: 'virtualNetwork'
   scope: rg
   params:{
-    name: !empty(vNetName) ? vNetName : '${abbrs.networkVirtualNetworks}${resourceToken}'
+    name: !empty(virtualNetworkName) ? virtualNetworkName : '${abbrs.networkVirtualNetworks}${resourceToken}'
     location: location
     deployVnet: deployVnet
   }
@@ -144,7 +144,10 @@ module devBoxCatalog 'core/devbox/devbox-catalog.bicep' = {
   }
 }
 
-
 output AZURE_LOCATION string = location
 output AZURE_RESOURCE_GROUP string = rg.name
 output AZURE_TENANT_ID string = tenant().tenantId
+output AZURE_SUBSCRIPTION_ID string = subscription().subscriptionId
+output AZURE_DEVBOX_NAME string = devBox.outputs.name
+output Azure_DEVBOX_PROJECT_NAME string = devBox.outputs.projectName
+output AZURE_DEVBOX_VNET_NAME string = vNet.outputs.vNetName

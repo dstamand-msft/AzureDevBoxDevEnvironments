@@ -12,11 +12,16 @@
       "value": "${AZURE_LOCATION}"
     },    
     "keyVaultPatSecretValue": {
-      "value": ""
+      "value": "${keyVaultPatSecretValue}"
     },
-    "devbox"
+    "devBoxName": {
+      "value": "${AZURE_DEVBOX_NAME=devbox-demo}"
+    },
     "projectName": {
-      "value": "${AZURE_DEVBOX_PROJECT_NAME}"
+      "value": "${AZURE_DEVBOX_PROJECT_NAME=demo-project}"
+    },
+    "virtualNetworkName": {
+      "value": "${AZURE_DEVBOX_VNET_NAME=kaydevbox-vnet}"
     },
     "deployVnet": {
       "value": true
