@@ -1,0 +1,97 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "imageTemplateName": {
+      "type": "string"
+    },
+    "api-version": {
+      "type": "string"
+    },
+    "svclocation": {
+      "type": "string"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "name": "[parameters('imageTemplateName')]",
+      "type": "Microsoft.VirtualMachineImages/imageTemplates",
+      "apiVersion": "[parameters('api-version')]",
+      "location": "[parameters('svclocation')]",
+      "dependsOn": [],
+      "tags": {
+        "imagebuilderTemplate": "win11multi",
+        "userIdentity": "enabled"
+      },
+      "identity": {
+        "type": "UserAssigned",
+        "userAssignedIdentities": {
+          "<imgBuilderId>": {}
+        }
+      },
+      "properties": {
+        "buildTimeoutInMinutes": 100,
+        "vmProfile": {
+          "vmSize": "Standard_B16as_v2",
+          "osDiskSizeGB": 127
+        },
+        "source": {
+          "type": "PlatformImage",
+          "publisher": "MicrosoftWindowsDesktop",
+          "offer": "Windows-11",
+          "sku": "win11-21h2-avd",
+          "version": "latest"
+        },
+        "customize": [
+          {
+            "type": "PowerShell",
+            "name": "Install Choco and Vscode and DevTools",
+            "inline": [
+              "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))",
+              "choco install -y vscode",
+              "choco install -y git",
+              "choco install -y googlechrome",
+              "choco install 7zip -y",
+              "choco install adobereader -y",
+              "choco install azcopy10 -y",
+              "choco install azure-cli -y",
+              "choco install azure-iot-installer -y",
+              "choco install docker-desktop -y",
+              "choco install Firefox -y",
+              "choco install flux -y",
+              "choco install gh -y",
+              "choco install git -y",
+              "choco install github-desktop -y",
+              "choco install paint.net -y",
+              "choco install pulumi -y",
+              "choco install pwsh -y",
+              "choco install terraform -y"
+            ]
+          },
+          {
+            "type": "PowerShell",
+            "name": "run application",
+            "inline": [
+                 "git clone https://github.com/dockersamples/example-voting-app.git voting-app",
+                 "cd voting-app",
+                 "docker compose up"
+            ]
+          }
+        ],
+        "distribute": [
+          {
+            "type": "SharedImage",
+            "galleryImageId": "/subscriptions/<subscriptionID>/resourceGroups/<rgName>/providers/Microsoft.Compute/galleries/<sharedImageGalName>/images/<imageDefName>",
+            "runOutputName": "<runOutputName>",
+            "artifactTags": {
+              "source": "azureVmImageBuilder",
+              "baseosimg": "win11multi"
+            },
+            "replicationRegions": ["<region1>", "<region2>"]
+          }
+        ]
+      }
+    }
+  ]
+}

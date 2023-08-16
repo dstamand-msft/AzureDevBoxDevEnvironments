@@ -40,6 +40,9 @@ param imageDefinitionProperties object
 @description('The name of the image definition in the image gallery.')
 param imageDefinitionName string
 
+@description('Image builder user identity')
+param imageBuilderIdentity string
+
 
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
@@ -150,16 +153,16 @@ module devBoxCatalog 'core/devbox/devbox-catalog.bicep' = {
 }
 
 // add Image gallery
-module devboxGallery 'core/compute/vm-image-gallery.bicep' = {
-  name: 'imageGallery'
+module devboxGallery 'core/devbox/devbox-image-gallery.bicep' = {
+  name: 'devboxGallery'
   scope: rg
   params: {
     imageGalleryName:'DevboxGallery' 
-    imageName:'devimage1'  
-    location: location    
     imageDefinitionName : imageDefinitionName
+    imageName:'devimage'  
+    location: location        
     imageDefinitionProperties:imageDefinitionProperties            
-    userdIdentity: devBox.outputs.identityPrincipalId
+    userdIdentity: imageBuilderIdentity
   }
 }
 
@@ -170,3 +173,6 @@ output AZURE_SUBSCRIPTION_ID string = subscription().subscriptionId
 output AZURE_DEVBOX_NAME string = devBox.outputs.name
 output Azure_DEVBOX_PROJECT_NAME string = devBox.outputs.projectName
 output AZURE_DEVBOX_VNET_NAME string = vNet.outputs.vNetName
+output AZURE_DEVBOX_GALLERY_NAME string = devboxGallery.name
+output AZURE_GALLERY_IMAGE_DEF string = imageDefinitionName
+output AZURE_IMAGE_BUILDER_IDENTITY string = imageBuilderIdentity

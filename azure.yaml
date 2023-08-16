@@ -3,5 +3,20 @@
 name: AzureDevBoxDevEnvironments
 infra:
   provider: bicep
+hooks:
+  preup:
+    windows:
+      shell: pwsh
+      run: ./scripts/imageBuilderScripts/CreateImageBuilderIdentity.ps1
+      interactive: true
+      continueOnError: false    
+    continueOnError: false
+    interactive: false
+#   postprovision:
+#     windows:
+#         shell: pwsh
+#         run: ./scripts/imageBuilderScripts/CreateCustomImage.ps1
+#         interactive: true
+#         continueOnError: false    
 
   

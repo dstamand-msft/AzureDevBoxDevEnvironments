@@ -24,7 +24,7 @@
       "value": "${AZURE_DEVBOX_VNET_NAME=kaydevbox-vnet}"
     },
     "deployVnet": {
-      "value": true
+      "value": false
     },
     "devboxRbac": {
       "value": {
@@ -36,22 +36,25 @@
       "value": {
         "name": "SampleCatalog",
         "repositoryType": "gitHub",
-        "uri": "https://github.com/Azure/deployment-environments.git",
+        "uri": "https://github.com/Keayoub/AzureDevBoxDevEnvironments.git",
         "branch": "main",
         "path": "/environments"
       }
     },
     "imageDefinitionName": {
-      "value": "Win11_Custom_Definition"
+      "value": "${AZURE_GALLERY_IMAGE_DEF=Custom_Definition}"
     },
     "imageDefinitionProperties": {
       "value": {
         "publisher": "AzureWindows11Custom",
-        "offer": "MicrosoftWindowsDesktop",
-        "sku": "windows-11",
+        "offer": "Windows-11",
+        "sku": "win11-21h2-avd",
         "osType": "Windows"        
       }
-    }
+    },
+     "imageBuilderIdentity": {
+      "value": "${AZURE_IMAGE_BUILDER_IDENTITY=aibIdentity1692203420}"
+    }  
   }
 }
 
