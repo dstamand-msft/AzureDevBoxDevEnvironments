@@ -27,7 +27,7 @@
       "identity": {
         "type": "UserAssigned",
         "userAssignedIdentities": {
-          "<imgBuilderId>": {}
+          "/subscriptions/ec6bedd5-fa1b-4040-934f-e7e442a76766/resourcegroups/rg-AzureDevBoxDevEnvironments-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aibIdentity1692203420": {}
         }
       },
       "properties": {
@@ -73,25 +73,35 @@
             "type": "PowerShell",
             "name": "run application",
             "inline": [
-                 "git clone https://github.com/dockersamples/example-voting-app.git voting-app",
-                 "cd voting-app",
-                 "docker compose up"
+              "git clone 'https://github.com/dockersamples/example-voting-app.git' voting-app",
+              "cd voting-app",
+              "docker compose up"
             ]
           }
         ],
         "distribute": [
           {
             "type": "SharedImage",
-            "galleryImageId": "/subscriptions/<subscriptionID>/resourceGroups/<rgName>/providers/Microsoft.Compute/galleries/<sharedImageGalName>/images/<imageDefName>",
-            "runOutputName": "<runOutputName>",
+            "galleryImageId": "/subscriptions/ec6bedd5-fa1b-4040-934f-e7e442a76766/resourceGroups/rg-AzureDevBoxDevEnvironments-dev/providers/Microsoft.Compute/galleries/devboxGallery/images/customImageDef",
+            "runOutputName": "aibCustWinManImg01",
             "artifactTags": {
               "source": "azureVmImageBuilder",
               "baseosimg": "win11multi"
             },
-            "replicationRegions": ["<region1>", "<region2>"]
+            "replicationRegions": [
+              "eastus2",
+              "eastus"
+            ]
           }
         ]
       }
     }
   ]
 }
+
+
+
+
+
+
+

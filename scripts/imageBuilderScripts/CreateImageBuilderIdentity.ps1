@@ -14,7 +14,7 @@ foreach ($line in $output) {
 }
 Write-Host "Environment variables set."
 
-'Az.ImageBuilder', 'Az.ManagedServiceIdentity' | ForEach-Object { Install-Module -Name $_ -AllowPrerelease -AllowClobber -Confirm:$false -Force }
+'Az.Resources', 'Az.ImageBuilder', 'Az.ManagedServiceIdentity', 'Az.Compute' | ForEach-Object { Install-Module -Name $_ -AllowPrerelease -AllowClobber -Confirm:$false }
  
 # Get your current subscription ID  
 $subscriptionID = "$env:AZURE_SUBSCRIPTION_ID"
@@ -29,18 +29,22 @@ $imageRoleDefName = "Azure Image Builder Image Def " + $identityName
   
 #Check if the identity already exists
 Write-Host "Check if the identity already exists..."
-
-$identity = Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -ErrorAction SilentlyContinue
-Write-Host "Identity name: $identity.Name"
+$identity = Get-AzUserAssignedIdentity -SubscriptionId $subscriptionID -ResourceGroupName $imageResourceGroup -Name $identityName -ErrorAction SilentlyContinue
+#$identityNameResourceId = $null
+$identityNamePrincipalId = $null
 
 if ($null -ne $identity) {
-    Write-Host "Identity already exists, skipping creation"    
+    Write-Information "Identity already exists, skipping creation"
+    #$identityNameResourceId = $identity.Id 
+    $identityNamePrincipalId = $identity.PrincipalId
 }
 else {
     # Create an identity 
     New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -Location $location
+    #$identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id 
     $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
 
+    
     Write-Host "Check if role definition already exists..."
     # check if role definition already exists
     $roleDef = Get-AzRoleDefinition -Name $imageRoleDefName -ErrorAction SilentlyContinue
@@ -64,8 +68,5 @@ else {
         # Grant the role definition to the VM Image Builder service principal 
         New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
     }
-
 }
-
-
 
