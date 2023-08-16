@@ -1,5 +1,4 @@
 param location string = resourceGroup().location
-
 param devBoxName string
 param definitions array 
 param galleryName string = 'Default'

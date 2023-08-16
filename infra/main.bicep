@@ -34,6 +34,12 @@ param poolNames array = [{name: 'DevPool', enableLocalAdmin: true, schedule: {},
 // use az devbox admin sku list for the storage and skus. Sku is the name parameter and storage is the capabilities.value where the name is OsDiskTypes
 param definitions array = [{name: 'DeveloperBox', sku: '', storage: ''}, {name: 'QABox', sku: '', storage: ''}]
 
+@description('The properties of the image definition in the image gallery.')
+param imageDefinitionProperties object
+
+@description('The name of the image definition in the image gallery.')
+param imageDefinitionName string
+
 
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
@@ -54,7 +60,6 @@ module vNet 'core/networking/virtualnetwork.bicep' = {
     deployVnet: deployVnet
   }
 }
-
 module keyVault 'core/security/keyvault.bicep' = if (empty(keyVaultPatSecretUri)) {
   name: 'keyVault'
   scope: rg
@@ -120,9 +125,6 @@ module devBoxPools 'core/devbox/devbox-pools.bicep' = {
   }
 }
 
-// Create RBAC group 
-
-
 module devBoxAccess 'core/devbox/devbox-access.bicep' = {
   name: 'devBoxAccess'
   scope: rg
@@ -144,6 +146,20 @@ module devBoxCatalog 'core/devbox/devbox-catalog.bicep' = {
     branch: catalog.branch
     path: contains(catalog, 'path') ? catalog.path : ''
     patKeyVaultUri: empty(keyVaultPatSecretUri) ? keyVaultSecret.outputs.secretUri : keyVaultPatSecretUri
+  }
+}
+
+// add Image gallery
+module devboxGallery 'core/compute/vm-image-gallery.bicep' = {
+  name: 'imageGallery'
+  scope: rg
+  params: {
+    imageGalleryName:'DevboxGallery' 
+    imageName:'devimage1'  
+    location: location    
+    imageDefinitionName : imageDefinitionName
+    imageDefinitionProperties:imageDefinitionProperties            
+    userdIdentity: devBox.outputs.identityPrincipalId
   }
 }
 

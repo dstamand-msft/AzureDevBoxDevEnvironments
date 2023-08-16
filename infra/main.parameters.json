@@ -10,7 +10,7 @@
     },
     "location": {
       "value": "${AZURE_LOCATION}"
-    },    
+    },
     "keyVaultPatSecretValue": {
       "value": "${keyVaultPatSecretValue}"
     },
@@ -25,7 +25,7 @@
     },
     "deployVnet": {
       "value": true
-    },    
+    },
     "devboxRbac": {
       "value": {
         "principalId": "bb289c05-9dbe-4946-8e8a-f4b7d092cb3d",
@@ -36,9 +36,20 @@
       "value": {
         "name": "SampleCatalog",
         "repositoryType": "gitHub",
-        "uri": "https://github.com/Azure/deployment-environments.git",        
+        "uri": "https://github.com/Azure/deployment-environments.git",
         "branch": "main",
         "path": "/environments"
+      }
+    },
+    "imageDefinitionName": {
+      "value": "Win11_Custom_Definition"
+    },
+    "imageDefinitionProperties": {
+      "value": {
+        "publisher": "AzureWindows11Custom",
+        "offer": "MicrosoftWindowsDesktop",
+        "sku": "windows-11",
+        "osType": "Windows"        
       }
     }
   }

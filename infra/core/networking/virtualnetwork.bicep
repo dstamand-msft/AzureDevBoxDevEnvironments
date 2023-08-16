@@ -3,7 +3,7 @@ param location string = resourceGroup().location
 param tags object = {}
 param deployVnet bool
 
-resource vNet 'Microsoft.Network/virtualNetworks@2022-07-01' = if(deployVnet) {
+resource vNet 'Microsoft.Network/virtualNetworks@2022-07-01' = if(deployVnet)  {
   name: name
   location: location
   tags: tags
