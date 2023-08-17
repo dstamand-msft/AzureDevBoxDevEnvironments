@@ -74,7 +74,7 @@ else {
 # Image distribution metadata reference name  
 $runOutputName = "aibCustWinManImg01"  
 # Image template name  
-$imageTemplateName = "customWinTemplate"
+$imageTemplateName = "customDevTemplate"
 
 # Create a gallery image definition
 # Gallery name 
@@ -106,7 +106,7 @@ New-AzGalleryImageDefinition -GalleryName $galleryName -ResourceGroupName $image
 # Configure the template with your variables:
 $cwd = (Get-Location)
 # copy the template to the current directory
-Copy-Item "$cwd/scripts/imageBuilderScripts/CustomImageTemplate.src" "$cwd/CustomImageTemplate.json" -Force
+Copy-Item "$cwd/scripts/imageBuilderScripts/CustomImageTemplate.src.json" "$cwd/CustomImageTemplate.json" -Force
 
 $templateFilePath = "$cwd/CustomImageTemplate.json"
 

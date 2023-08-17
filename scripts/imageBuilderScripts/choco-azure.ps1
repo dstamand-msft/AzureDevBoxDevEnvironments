@@ -21,4 +21,4 @@ choco install pwsh -y
 choco install servicebusexplorer -y
 choco install terraform -y
 choco install vscode -y
-choco install git -y
+

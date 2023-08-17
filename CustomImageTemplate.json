@@ -58,22 +58,23 @@
               "choco install azure-cli -y",
               "choco install azure-iot-installer -y",
               "choco install docker-desktop -y",
-              "choco install Firefox -y",
-              "choco install flux -y",
-              "choco install gh -y",
               "choco install git -y",
               "choco install github-desktop -y",
-              "choco install paint.net -y",
-              "choco install pulumi -y",
               "choco install pwsh -y",
               "choco install terraform -y"
             ]
           },
           {
             "type": "PowerShell",
+            "name": "clone application",
+            "inline": [
+              "git clone 'https://github.com/dockersamples/example-voting-app.git' voting-app"
+            ]
+          },
+          {
+            "type": "PowerShell",
             "name": "run application",
             "inline": [
-              "git clone 'https://github.com/dockersamples/example-voting-app.git' voting-app",
               "cd voting-app",
               "docker compose up"
             ]
