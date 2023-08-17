@@ -6,14 +6,14 @@ Write-Host "Chocolatey Installed"
 Write-Host "Installing Packages..."
 choco install -y vscode
 choco install 7zip -y
-choco install adobereader -y
-choco install docker-desktop -y
 choco install git -y
+choco install pwsh -y
+#choco install adobereader -y
+choco install docker-desktop -y
 choco install kubernetes-cli -y
 choco install kubernetes-helm -y
-choco install pwsh -y
 choco install terraform -y
-Write-Host "Packages Installed"
+Write-Host "All Packages Installed"
 
 Write-Host "Installing Azure CLI..."
 # Clone Application from azure
