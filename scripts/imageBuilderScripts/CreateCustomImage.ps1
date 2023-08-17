@@ -1,4 +1,9 @@
 Write-Host ""
+Write-Host "Installing required Az modules..."
+Write-Host ""
+'Az.Resources', 'Az.ImageBuilder', 'Az.ManagedServiceIdentity', 'Az.Compute' | ForEach-Object { Install-Module -Name $_ -AllowPrerelease -AllowClobber -Confirm:$false }
+
+Write-Host ""
 Write-Host "Loading azd .env file from current environment"
 Write-Host ""
 
@@ -12,9 +17,9 @@ foreach ($line in $output) {
     $value = $value -replace '^\"|\"$'
     [Environment]::SetEnvironmentVariable($name, $value)
 }
+Write-Host ""
 Write-Host "Environment variables set."
-
-'Az.Resources', 'Az.ImageBuilder', 'Az.ManagedServiceIdentity', 'Az.Compute' | ForEach-Object { Install-Module -Name $_ -AllowPrerelease -AllowClobber -Confirm:$false }
+Write-Host ""
  
 # Get your current subscription ID  
 $subscriptionID = "$env:AZURE_SUBSCRIPTION_ID"
@@ -28,7 +33,10 @@ $identityName = "$env:AZURE_IMAGE_BUILDER_IDENTITY"
 $imageRoleDefName = "Azure Image Builder Image Def " + $identityName 
   
 #Check if the identity already exists
+Write-Host ""
 Write-Host "Check if the identity already exists..."
+Write-Host ""
+
 $identity = Get-AzUserAssignedIdentity -SubscriptionId $subscriptionID -ResourceGroupName $imageResourceGroup -Name $identityName -ErrorAction SilentlyContinue
 $identityNameResourceId = $null
 $identityNamePrincipalId = $null
@@ -44,7 +52,6 @@ else {
     $identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id 
     $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
 
-    
     Write-Host "Check if role definition already exists..."
     # check if role definition already exists
     $roleDef = Get-AzRoleDefinition -Name $imageRoleDefName -ErrorAction SilentlyContinue
@@ -70,6 +77,10 @@ else {
     }
 
 }
+
+Write-Host ""
+Write-Host "Creating image template..."
+Write-Host ""
 
 # Image distribution metadata reference name  
 $runOutputName = "aibCustWinManImg01"  

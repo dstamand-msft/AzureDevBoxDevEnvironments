@@ -16,7 +16,7 @@ git clone 'https://github.com/dockersamples/example-voting-app.git' voting-app
 # Run application
 $cwd = (Get-Location)
 Set-Location $cwd/voting-app
-docker compose up
+#docker compose up
 
 # exit script
 exit 0
