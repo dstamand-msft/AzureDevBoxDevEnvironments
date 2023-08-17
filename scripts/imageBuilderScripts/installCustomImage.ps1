@@ -11,14 +11,9 @@ choco install adobereader -y
 choco install kubernetes-cli -y
 choco install kubernetes-helm -y
 choco install terraform -y
-#choco install docker-desktop -y
+choco install docker-desktop -y
+choco install git -y
 Write-Host "All Packages Installed"
-
-Write-Host "Installing Azure CLI..."
-# Clone Application from azure
-choco install winget-cli
-winget install --id Git.Git -e --accept-source-agreements
-winget install --id Docker.DockerDesktop -e --accept-source-agreements
 
 # Create-folder
 New-Item -Path "C:\workingdir" -ItemType "directory" -Force
