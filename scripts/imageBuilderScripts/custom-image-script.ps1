@@ -13,6 +13,7 @@ choco install docker-desktop -y
 choco install kubernetes-cli -y
 choco install kubernetes-helm -y
 choco install terraform -y
+choco install dotnet -y
 Write-Host "All Packages Installed"
 
 Write-Host "Installing Azure CLI..."
