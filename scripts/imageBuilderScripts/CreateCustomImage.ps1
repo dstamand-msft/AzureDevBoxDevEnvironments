@@ -85,7 +85,7 @@ Write-Host ""
 # Image distribution metadata reference name  
 $runOutputName = "aibCustWinManImg01"  
 # Image template name  
-$imageTemplateName = "devBoxCustomImageTemplate"
+$imageTemplateName = "mydevBoxCustomImg"
 
 # Create a gallery image definition
 # Gallery name 

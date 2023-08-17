@@ -33,7 +33,7 @@
       "properties": {
         "buildTimeoutInMinutes": 0,
         "vmProfile": {
-          "vmSize": "Standard_B16as_v2",
+          "vmSize": "Standard_B8as_v2",
           "osDiskSizeGB": 127
         },
         "source": {
@@ -48,8 +48,7 @@
             "type": "PowerShell",
             "name": "customscript",
             "scriptUri": "https://raw.githubusercontent.com/Keayoub/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/custom-image-script.ps1",                  
-            "runElevated": true,
-            "runAsSystem": true           
+            "runElevated": true
           }
         ],
         "distribute": [

@@ -7,16 +7,18 @@ Write-Host "Installing Packages..."
 choco install vscode -y
 choco install 7zip -y
 choco install pwsh -y
-#choco install adobereader -y
-choco install docker-desktop -y
+choco install adobereader -y
+#choco install docker-desktop -y
 #choco install kubernetes-cli -y
 #choco install kubernetes-helm -y
 choco install terraform -y
-choco install git.install -y
 Write-Host "All Packages Installed"
 
 Write-Host "Installing Azure CLI..."
 # Clone Application from azure
+choco install winget-cli
+winget install --id Git.Git -e --accept-source-agreements
+winget install --id Docker.DockerDesktop -e --accept-source-agreements
 
 # Create-folder
 New-Item -Path "C:\workingdir" -ItemType "directory" -Force
