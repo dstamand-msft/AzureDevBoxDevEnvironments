@@ -4,7 +4,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 Write-Host "Chocolatey Installed"
 
 Write-Host "Installing Packages..."
-choco install -y vscode
+choco install vscode -y
 choco install 7zip -y
 choco install pwsh -y
 #choco install adobereader -y
@@ -12,7 +12,7 @@ choco install docker-desktop -y
 #choco install kubernetes-cli -y
 #choco install kubernetes-helm -y
 choco install terraform -y
-choco install git -y
+choco install git.install -y
 Write-Host "All Packages Installed"
 
 Write-Host "Installing Azure CLI..."

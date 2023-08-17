@@ -85,7 +85,7 @@ Write-Host ""
 # Image distribution metadata reference name  
 $runOutputName = "aibCustWinManImg01"  
 # Image template name  
-$imageTemplateName = "devBoxCustomDevImage"
+$imageTemplateName = "devBoxCustomImageTemplate"
 
 # Create a gallery image definition
 # Gallery name 
@@ -143,7 +143,7 @@ Invoke-AzResourceAction  -ResourceName $imageTemplateName  -ResourceGroupName $i
 $runStatus = $null
 while ($runStatus -ne "Succeeded" -and $runStatus -ne "Failed") {
     $runStatus = (Get-AzImageBuilderTemplate -ImageTemplateName $imageTemplateName -ResourceGroupName $imageResourceGroup).LastRunStatusRunState
-    Write-Host "Monitoring image template run..."
+    Write-Host "Status:$runStatus <=> Monitoring image template run..."
     Start-Sleep -s 30
 }
 
