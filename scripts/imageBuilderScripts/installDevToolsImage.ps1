@@ -33,9 +33,7 @@ try {
     $aibRoleImageCreationPath =  $workingdir+"\Run-app.ps1" 
 
     # Download the configuration file
-    Invoke-WebRequest -Uri $runappfileUrl -OutFile $aibRoleImageCreationPath -UseBasicParsing 
-
-   
+    Invoke-WebRequest -Uri $runappfileUrl -OutFile $aibRoleImageCreationPath -UseBasicParsing    
     Set-Location  $workingdir
     git clone 'https://github.com/dockersamples/example-voting-app.git' voting-app
     Write-Host "Cloning Application from Azure"
