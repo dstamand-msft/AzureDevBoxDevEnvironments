@@ -11,7 +11,7 @@ choco install terraform -y
 choco install dotnet
 
 # Clone Application from azure
-git clone 'https://github.com/dockersamples/example-voting-app.git' voting-app -ErrorAction SilentlyContinue
+git clone 'https://github.com/dockersamples/example-voting-app.git' voting-app
 
 # Run application
 $cwd = (Get-Location)
