@@ -15,9 +15,11 @@ choco install docker-desktop -y
 Write-Host "All Packages Installed"
 
 try {
-    
+
     Write-Host "Install Git"
     choco install git -y
+    Write-Host "Refresh Environment Variable - Path"
+    RefreshEnv.cmd
     # Clone Application from azure
     # Create-folder
     New-Item -Path "C:\workingdir" -ItemType "directory" -Force

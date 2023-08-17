@@ -15,6 +15,10 @@ choco install docker-desktop -y
 choco install git -y
 Write-Host "All Packages Installed"
 
+Write-Host "Refresh Environment Variable - Path"
+RefreshEnv.cmd
+Write-Host ""
+
 # Create-folder
 New-Item -Path "C:\workingdir" -ItemType "directory" -Force
 Set-Location "C:\workingdir"
