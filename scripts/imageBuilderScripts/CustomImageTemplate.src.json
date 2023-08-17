@@ -47,7 +47,7 @@
           {
             "type": "PowerShell",
             "name": "customscript",
-            "scriptUri": "https://raw.githubusercontent.com/Keayoub/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/custom-image-script.ps1",                  
+            "scriptUri": "https://raw.githubusercontent.com/Keayoub/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/install-image-devtools.ps1",                  
             "runElevated": true
           }
         ],
