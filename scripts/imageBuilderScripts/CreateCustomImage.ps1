@@ -1,7 +1,7 @@
 Write-Host ""
 Write-Host "Installing required Az modules..."
 Write-Host ""
-'Az.Resources', 'Az.ImageBuilder', 'Az.ManagedServiceIdentity', 'Az.Compute' | ForEach-Object { Install-Module -Name $_ -AllowPrerelease -AllowClobber -Confirm:$false }
+'Az.Resources', 'Az.ImageBuilder', 'Az.ManagedServiceIdentity', 'Az.Compute' | ForEach-Object { Install-Module -Name $_ -AllowPrerelease -AllowClobber -Confirm:$true -AcceptLicense }
 
 Write-Host ""
 Write-Host "Loading azd .env file from current environment"
@@ -85,7 +85,7 @@ Write-Host ""
 # Image distribution metadata reference name  
 $runOutputName = "aibCustWinManImg01"  
 # Image template name  
-$imageTemplateName = "customDevTemplate"
+$imageTemplateName = "devBoxCustomDevImage"
 
 # Create a gallery image definition
 # Gallery name 
@@ -139,5 +139,12 @@ Write-Host "Running image template..."
 Invoke-AzResourceAction  -ResourceName $imageTemplateName  -ResourceGroupName $imageResourceGroup  -ResourceType Microsoft.VirtualMachineImages/imageTemplates  -ApiVersion "2020-02-14"  -Action Run
 
 # Monitor the image template run
-Write-Host "Monitoring image template run..."
-Get-AzImageBuilderTemplate -ImageTemplateName $imageTemplateName -ResourceGroupName $imageResourceGroup | Select-Object -Property Name, LastRunStatusRunState, LastRunStatusMessage, ProvisioningState
+# While LastRunStatusRunState is not Succeeded or Failed, keep monitoring
+$runStatus = $null
+while ($runStatus -ne "Succeeded" -and $runStatus -ne "Failed") {
+    $runStatus = (Get-AzImageBuilderTemplate -ImageTemplateName $imageTemplateName -ResourceGroupName $imageResourceGroup).LastRunStatusRunState
+    Write-Host "Monitoring image template run..."
+    Start-Sleep -s 30
+}
+
+Write-Host "Image template run complete."
