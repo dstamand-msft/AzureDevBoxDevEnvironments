@@ -12,7 +12,15 @@ choco install kubernetes-cli -y
 choco install kubernetes-helm -y
 choco install terraform -y
 choco install docker-desktop -y
-Write-Host "Install Git" 
+
+Write-Host "Install Azure Developers Tools..." 
+choco install microsoftazurestorageexplorer -y 
+choco install azure-data-studio -y
+choco install azcopy10 -y
+choco install azure-cli -y
+Write-Host "Azure Developers tools installed" 
+
+Write-Host "Install Git..." 
 choco install git -y
 
 Write-Host "Refresh Environment Variable - Path"    
