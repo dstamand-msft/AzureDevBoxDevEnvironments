@@ -8,10 +8,10 @@ choco install vscode -y
 choco install 7zip -y
 choco install pwsh -y
 choco install adobereader -y
-#choco install docker-desktop -y
-#choco install kubernetes-cli -y
-#choco install kubernetes-helm -y
+choco install kubernetes-cli -y
+choco install kubernetes-helm -y
 choco install terraform -y
+#choco install docker-desktop -y
 Write-Host "All Packages Installed"
 
 Write-Host "Installing Azure CLI..."
