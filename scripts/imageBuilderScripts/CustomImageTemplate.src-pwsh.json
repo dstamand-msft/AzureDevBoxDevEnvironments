@@ -27,11 +27,11 @@
       "identity": {
         "type": "UserAssigned",
         "userAssignedIdentities": {
-          "/subscriptions/ec6bedd5-fa1b-4040-934f-e7e442a76766/resourcegroups/rg-AzureDevBoxDevEnvironments-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aibIdentity1692203420": {}
+          "<imgBuilderId>": {}
         }
       },
       "properties": {
-        "buildTimeoutInMinutes": 0,
+        "buildTimeoutInMinutes": 60,
         "vmProfile": {
           "vmSize": "Standard_B8as_v2",
           "osDiskSizeGB": 127
@@ -46,23 +46,37 @@
         "customize": [
           {
             "type": "PowerShell",
-            "name": "customscript",
-            "scriptUri": "https://raw.githubusercontent.com/Keayoub/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/installDevToolsImage.ps1",                  
-            "runElevated": true
+            "name": "Install Choco and Vscode",
+            "inline": [
+              "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))",
+              "choco install -y vscode",
+              "choco install winget-cli",
+              "choco install 7zip -y"
+            ]
+          },
+          {
+            "type": "PowerShell",
+            "name": "Install Docker Desktop ",
+            "inline": [
+              "winget install --id Git.Git -e --accept-source-agreements",
+              "winget install --id Docker.DockerDesktop -e --accept-source-agreements",
+              "winget install --id Git.Git -e --accept-source-agreements",
+              "winget install --id Docker.DockerDesktop -e --accept-source-agreements"
+            ]
           }
         ],
         "distribute": [
           {
             "type": "SharedImage",
-            "galleryImageId": "/subscriptions/ec6bedd5-fa1b-4040-934f-e7e442a76766/resourceGroups/rg-AzureDevBoxDevEnvironments-dev/providers/Microsoft.Compute/galleries/devboxGallery/images/customImageDef",
-            "runOutputName": "aibCustWinManImg01",
+            "galleryImageId": "/subscriptions/<subscriptionID>/resourceGroups/<rgName>/providers/Microsoft.Compute/galleries/<sharedImageGalName>/images/<imageDefName>",
+            "runOutputName": "<runOutputName>",
             "artifactTags": {
               "source": "azureVmImageBuilder",
               "baseosimg": "win11multi"
             },
             "replicationRegions": [
-              "eastus2",
-              "eastus"
+              "<region1>",
+              "<region2>"
             ]
           }
         ]
@@ -70,10 +84,3 @@
     }
   ]
 }
-
-
-
-
-
-
-

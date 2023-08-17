@@ -16,7 +16,7 @@ Write-Host "All Packages Installed"
 
 Write-Host "Installing Azure CLI..."
 # Clone Application from azure
-choco install winget-cli
+choco install winget-cli -y
 winget install --id Git.Git -e --accept-source-agreements
 winget install --id Docker.DockerDesktop -e --accept-source-agreements
 
