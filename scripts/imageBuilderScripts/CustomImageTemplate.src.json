@@ -47,11 +47,8 @@
           {
             "type": "PowerShell",
             "name": "customscript",
-            "scriptUri": "https://raw.githubusercontent.com/Keayoub/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/custom-image-script.ps1",
-            "validExitCodes": "0",
-            "sha256Checksum": "",
-            "runElevated": true,
-            "runAsSystem": true
+            "scriptUri": "https://raw.githubusercontent.com/Keayoub/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/custom-image-script.ps1",                  
+            "runElevated": true            
           }
         ],
         "distribute": [

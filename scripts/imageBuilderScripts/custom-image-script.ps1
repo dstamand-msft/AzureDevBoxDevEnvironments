@@ -10,7 +10,6 @@ choco install pwsh -y
 choco install terraform -y
 choco install dotnet
 
-
 # Clone Application from azure
 git clone 'https://github.com/dockersamples/example-voting-app.git' voting-app -ErrorAction SilentlyContinue
 
@@ -19,6 +18,8 @@ $cwd = (Get-Location)
 Set-Location $cwd/voting-app
 docker compose up
 
+# exit script
+exit 0
 
 
 

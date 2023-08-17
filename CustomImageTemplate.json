@@ -46,38 +46,12 @@
         "customize": [
           {
             "type": "PowerShell",
-            "name": "Install Choco and Vscode and DevTools",
-            "inline": [
-              "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))",
-              "choco install -y vscode",
-              "choco install -y git",
-              "choco install -y googlechrome",
-              "choco install 7zip -y",
-              "choco install adobereader -y",
-              "choco install azcopy10 -y",
-              "choco install azure-cli -y",
-              "choco install azure-iot-installer -y",
-              "choco install docker-desktop -y",
-              "choco install git -y",
-              "choco install github-desktop -y",
-              "choco install pwsh -y",
-              "choco install terraform -y"
-            ]
-          },
-          {
-            "type": "PowerShell",
-            "name": "clone application",
-            "inline": [
-              "git clone 'https://github.com/dockersamples/example-voting-app.git' voting-app"
-            ]
-          },
-          {
-            "type": "PowerShell",
-            "name": "run application",
-            "inline": [
-              "cd voting-app",
-              "docker compose up"
-            ]
+            "name": "customscript",
+            "scriptUri": "https://raw.githubusercontent.com/Keayoub/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/custom-image-script.ps1",
+            "validExitCodes": "0",
+            "sha256Checksum": "",
+            "runElevated": true,
+            "runAsSystem": true
           }
         ],
         "distribute": [
