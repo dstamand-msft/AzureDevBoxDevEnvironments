@@ -12,20 +12,27 @@ choco install kubernetes-cli -y
 choco install kubernetes-helm -y
 choco install terraform -y
 choco install docker-desktop -y
-choco install git -y
 Write-Host "All Packages Installed"
 
-
-# Clone Application from azure
-# Create-folder
-New-Item -Path "C:\workingdir" -ItemType "directory" -Force
-Set-Location "C:\workingdir"
-git clone 'https://github.com/dockersamples/example-voting-app.git' voting-app
-Write-Host "Cloning Application from Azure"
-# Run application
-$cwd = (Get-Location)
-Set-Location $cwd/voting-app
-#docker compose up
+try {
+    
+    Write-Host "Install Git"
+    choco install git -y
+    # Clone Application from azure
+    # Create-folder
+    New-Item -Path "C:\workingdir" -ItemType "directory" -Force
+    Set-Location "C:\workingdir"
+    git clone 'https://github.com/dockersamples/example-voting-app.git' voting-app
+    Write-Host "Cloning Application from Azure"
+    # Run application
+    $cwd = (Get-Location)
+    Set-Location $cwd/voting-app
+    #docker compose up
+   
+}
+catch {
+    exit 0
+}
 
 # exit script
 exit 0
