@@ -30,17 +30,10 @@ try {
     New-Item -Path $workingdir -ItemType "directory" -Force
 
     $runappfileUrl = "https://github.com/Keayoub/AzureDevBoxDevEnvironments/blob/main/scripts/imageBuilderScripts/Run-app.ps1" 
-    $aibRoleImageCreationPath =  $workingdir+"\Run-app.ps1" 
+    $runapplocalFile = $workingdir + "\Run-app.ps1" 
 
     # Download the configuration file
-    Invoke-WebRequest -Uri $runappfileUrl -OutFile $aibRoleImageCreationPath -UseBasicParsing    
-    Set-Location  $workingdir
-    git clone 'https://github.com/dockersamples/example-voting-app.git' voting-app
-    Write-Host "Cloning Application from Azure"
-    # Run application
-    $cwd = (Get-Location)
-    Set-Location $cwd/voting-app
-    docker compose up   
+    Invoke-WebRequest -Uri $runappfileUrl -OutFile $runapplocalFile -UseBasicParsing        
 }
 catch {
     exit 0

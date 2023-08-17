@@ -50,6 +50,16 @@
             "scriptUri": "https://raw.githubusercontent.com/Keayoub/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/installDevToolsImage.ps1",                  
             "runElevated": true,
             "runAsSystem": true            
+          },
+          {
+            "type": "WindowsRestart"
+          },
+          {
+            "type": "PowerShell",
+            "name": "customscript",
+            "scriptUri": "https://raw.githubusercontent.com/Keayoub/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/Run-app.ps1",
+            "runElevated": true,
+            "runAsSystem": true
           }
         ],
         "distribute": [
