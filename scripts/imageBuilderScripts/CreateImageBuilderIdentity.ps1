@@ -57,19 +57,24 @@ else {
     }
     else {    
         # Create a role definition file 
+        Write-Host "Creating a role definition file"
+        Write-Host ""
         $aibRoleImageCreationUrl = "https://raw.githubusercontent.com/azure/azvmimagebuilder/master/solutions/12_Creating_AIB_Security_Roles/aibRoleImageCreation.json" 
         $aibRoleImageCreationPath = "aibRoleImageCreation.json" 
 
         # Download the configuration 
+        Write-Host "Downloading the configuration file"
         Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPath -UseBasicParsing 
         ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<subscriptionID>', $subscriptionID) | Set-Content -Path $aibRoleImageCreationPath 
         ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<rgName>', $imageResourceGroup) | Set-Content -Path $aibRoleImageCreationPath 
         ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace 'Azure Image Builder Service Image Creation Role', $imageRoleDefName) | Set-Content -Path $aibRoleImageCreationPath 
 
         # Create a role definition 
+        Write-Host "Creating a role definition"
         New-AzRoleDefinition -InputFile  ./aibRoleImageCreation.json 
 
         # Grant the role definition to the VM Image Builder service principal 
+        Write-Host "Granting the role definition to the VM Image Builder service principal"
         New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
     }
 }
