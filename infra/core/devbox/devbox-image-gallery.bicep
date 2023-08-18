@@ -1,9 +1,10 @@
 param location string = resourceGroup().location
-param imageDefinitionName string
-param imageDefinitionProperties object
 param imageGalleryName string = ''
 param imageTemplateName string = ''
+param imageDefinitionName string
+param imageDefinitionProperties object
 param userdIdentity string = ''
+param imageVersion string = ''
 
 // use https://learn.microsoft.com/en-us/cli/azure/vm/image?view=azure-cli-latest#az-vm-image-list
 // to find the publisher, offer, sku, version
@@ -48,16 +49,17 @@ resource userImgBuilderIdentity 'Microsoft.ManagedIdentity/userAssignedIdentitie
   location: location
 }
 
-module vmCustomDefImage '../virtual-machine-images/virtualmachineimages.bicep' = {
-  name: 'CustomDefImage'
+module CustomImageDef '../virtual-machine-images/virtualmachineimages.bicep' = {
+  name: 'CustomImageDef'
   params: {
-    name: imageTemplateName
+    imageTemplateName: imageTemplateName
     location: location
     userImageBuilderName: userImgBuilderIdentity.name
     // see the type of object (for the definition), here
     // https://learn.microsoft.com/en-us/azure/templates/microsoft.virtualmachineimages/imagetemplates?pivots=deployment-language-bicep#imagetemplatecustomizer    
     imageSource: imageSource
     sigImageDefinitionId: imageGalleryDefinition.outputs.id
+    sigImageVersion: imageVersion
     customizationSteps: [
       {
         type: 'PowerShell'

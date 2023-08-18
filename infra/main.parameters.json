@@ -41,8 +41,17 @@
         "path": "/environments"
       }
     },
+    "imageGaleryName": {
+      "value": "${AZURE_DEVBOX_GALLERY_NAME=DevboxGallery}"
+    },
+    "imageTemplateName": {
+      "value": "${AZURE_GALLERY_TEMPLATE_NAME=CustomDevImgTemplate}"
+    },
     "imageDefinitionName": {
-      "value": "${AZURE_GALLERY_IMAGE_DEF=CustomDevImgTemplate}"
+      "value": "${AZURE_GALLERY_IMAGE_DEF=customImageDef}"
+    },
+    "imageVersion": {
+      "value": "${AZURE_IMAGE_VERSION=2.0.0}"
     },
     "imageDefinitionProperties": {
       "value": {
@@ -50,12 +59,12 @@
         "offer": "Windows-11",
         "sku": "win11-21h2-avd",
         "version": "latest",
-        "osType": "Windows"        
+        "osType": "Windows"
       }
     },
-     "imageBuilderIdentity": {
+    "imageBuilderIdentity": {
       "value": "${AZURE_IMAGE_BUILDER_IDENTITY=aibIdentity1692203420}"
-    }  
+    }
   }
 }
 

@@ -34,14 +34,21 @@ param poolNames array = [{name: 'DevPool', enableLocalAdmin: true, schedule: {},
 // use az devbox admin sku list for the storage and skus. Sku is the name parameter and storage is the capabilities.value where the name is OsDiskTypes
 param definitions array = [{name: 'DeveloperBox', sku: '', storage: ''}, {name: 'QABox', sku: '', storage: ''}]
 
+
+@description('The name of the image template in the image gallery')
+param imageGaleryName string = ''
+
+@description('The name of the image template in the image gallery')
+param imageTemplateName string = ''
+
+@description('The name of the image definition in the image gallery.')
+param imageDefinitionName string = ''
+
 @description('The properties of the image definition in the image gallery.')
 param imageDefinitionProperties object
 
-@description('The name of the image definition in the image gallery.')
-param imageDefinitionName string
-
 @description('Image builder user identity')
-param imageBuilderIdentity string
+param imageBuilderIdentity string = ''
 
 
 var abbrs = loadJsonContent('./abbreviations.json')
@@ -154,12 +161,12 @@ module devBoxCatalog 'core/devbox/devbox-catalog.bicep' = {
 
 // add Image gallery
 module devboxCustomGallery 'core/devbox/devbox-image-gallery.bicep' = {
-  name: 'devboxGallery'
+  name: 'DevboxGallery'
   scope: rg
   params: {
-    imageGalleryName:'DevboxGallery' 
-    imageDefinitionName : imageDefinitionName
-    imageTemplateName:'customDevImage'  
+    imageGalleryName: !empty(imageGaleryName) ? imageBuilderIdentity : '${replace(devBox.name, '[^a-zA-Z0-9]', '')}Gallery'
+    imageTemplateName:imageTemplateName  
+    imageDefinitionName : imageDefinitionName    
     location: location        
     imageDefinitionProperties:imageDefinitionProperties            
     userdIdentity: imageBuilderIdentity

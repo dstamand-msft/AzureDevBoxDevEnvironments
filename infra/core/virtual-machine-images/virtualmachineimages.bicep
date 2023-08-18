@@ -1,5 +1,5 @@
 @description('Required. Name prefix of the Image Template to be built by the Azure Image Builder service.')
-param name string
+param imageTemplateName string
 
 @description('Required. Name of the User Assigned Identity to be used to deploy Image Templates in Azure Image Builder.')
 param userImageBuilderName string
@@ -81,7 +81,7 @@ var imageReplicationRegionsVar = empty(imageReplicationRegions) ? array(location
 
 var sharedImage = {
   type: 'SharedImage'
-  galleryImageId: empty(sigImageVersion) ? sigImageDefinitionId : '${sigImageDefinitionId}/versions/${sigImageVersion}'
+  galleryImageId: empty(sigImageVersion) ? sigImageDefinitionId : '${sigImageDefinitionId}/versions/${sigImageVersion}'  
   excludeFromLatest: excludeFromLatest
   replicationRegions: imageReplicationRegionsVar
   storageAccountType: storageAccountType
@@ -108,7 +108,7 @@ resource ImageBuilderIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@
 }
 
 resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-02-14' = {
-  name: name
+  name: imageTemplateName
   location: location
   tags: tags
   identity: {

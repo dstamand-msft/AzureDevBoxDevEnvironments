@@ -48,7 +48,7 @@ if ($null -ne $identity) {
 }
 else {
     # Create an identity 
-    New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -Location $location
+    New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -SubscriptionId $subscriptionID -Location $location
     $identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id 
     $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
 
@@ -73,7 +73,7 @@ else {
         New-AzRoleDefinition -InputFile  ./aibRoleImageCreation.json 
 
         # Grant the role definition to the VM Image Builder service principal 
-        New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
+        New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -SubscriptionId $subscriptionID  -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
     }
 
 }
