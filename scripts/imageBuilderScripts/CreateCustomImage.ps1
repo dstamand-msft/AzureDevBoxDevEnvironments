@@ -1,6 +1,7 @@
 Write-Host ""
 Write-Host "Installing required Az modules..."
 Write-Host ""
+Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
 'Az.Resources', 'Az.ImageBuilder', 'Az.ManagedServiceIdentity', 'Az.Compute' | ForEach-Object { Install-Module -Name $_ -AllowPrerelease -AllowClobber -Confirm }
 
 Write-Host ""
