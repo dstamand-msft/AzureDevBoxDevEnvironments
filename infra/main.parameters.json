@@ -42,13 +42,14 @@
       }
     },
     "imageDefinitionName": {
-      "value": "${AZURE_GALLERY_IMAGE_DEF=Custom_Definition}"
+      "value": "${AZURE_GALLERY_IMAGE_DEF=CustomDevImgTemplate}"
     },
     "imageDefinitionProperties": {
       "value": {
-        "publisher": "AzureWindows11Custom",
+        "publisher": "MicrosoftWindowsDesktop",
         "offer": "Windows-11",
         "sku": "win11-21h2-avd",
+        "version": "latest",
         "osType": "Windows"        
       }
     },

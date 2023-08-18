@@ -2,7 +2,7 @@
 param name string
 
 @description('Required. Name of the User Assigned Identity to be used to deploy Image Templates in Azure Image Builder.')
-param userMsiName string
+param userImageBuilderName string
 
 @description('Optional. Resource group of the user assigned identity.')
 param userMsiResourceGroup string = resourceGroup().name
@@ -103,18 +103,18 @@ var vnetConfig = {
   subnetId: subnetId
 }
 
-resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
-  name: userMsiName
+resource ImageBuilderIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
+  name: userImageBuilderName
 }
 
 resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-02-14' = {
-  name: '${name}-customWinTemplate'
+  name: name
   location: location
   tags: tags
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
-      '${userAssignedIdentity.id}': {}
+      '${ImageBuilderIdentity.id}': {}
     }
   }
   properties: {
