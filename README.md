@@ -2,12 +2,33 @@
 
 ![image](https://github.com/dstamand-msft/AzureDevBoxDevEnvironments/blob/main/media/DevBox-Creation.png)
 
+
+### Prerequisites
+
+#### To Run Locally
+
+* [Azure Developer CLI](https://aka.ms/azure-dev/install)
+* [Git](https://git-scm.com/downloads)
+* [Powershell 7+ (pwsh)](https://github.com/powershell/powershell) - For Windows users only.
+  * **Important**: Ensure you can run `pwsh.exe` from a PowerShell command. If this fails, you likely need to upgrade PowerShell.
+
+>NOTE: Your Azure Account must have `Microsoft.Authorization/roleAssignments/write` permissions, such as [User Access Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) or [Owner](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner).
+
+#### To Run in GitHub Codespaces or VS Code Remote Containers
+
+You can run this repo virtually by using GitHub Codespaces or VS Code Remote Containers.  Click on one of the buttons below to open this repo in one of those options.
+
+[![Open in GitHub Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://codespaces.new/Keayoub/AzureDevBoxDevEnvironments)
+[![Open in Remote - Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Remote%20-%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Keayoub/AzureDevBoxDevEnvironments)
+
 ### Installation using Azd deployment
 
 #### Project Initialization
 
-1. Create a new folder and switch to it in the terminal
-1. Run `azd auth login`
+1. Create a new folder **your_folder_name**
+2. git clone <https://github.com/Keayoub/AzureDevBoxDevEnvironments.git> **your_folder_name**
+3. switch to your **your_folder_name** in the terminal
+4. Run `azd auth login`
 
 #### Starting from scratch
 
