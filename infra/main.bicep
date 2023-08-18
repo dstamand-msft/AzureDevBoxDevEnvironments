@@ -183,3 +183,4 @@ output AZURE_DEVBOX_VNET_NAME string = vNet.outputs.vNetName
 output AZURE_DEVBOX_GALLERY_NAME string = devboxCustomGallery.name
 output AZURE_GALLERY_IMAGE_DEF string = imageDefinitionName
 output AZURE_IMAGE_BUILDER_IDENTITY string = imageBuilderIdentity
+output AZURE_GALLERY_TEMPLATE_NAME string = imageTemplateName

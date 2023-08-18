@@ -1,7 +1,7 @@
 Write-Host ""
 Write-Host "Installing required Az modules..."
 Write-Host ""
-'Az.Resources', 'Az.ImageBuilder', 'Az.ManagedServiceIdentity', 'Az.Compute' | ForEach-Object { Install-Module -Name $_ -AllowPrerelease -AllowClobber -Confirm:$true -AcceptLicense }
+'Az.Resources', 'Az.ImageBuilder', 'Az.ManagedServiceIdentity', 'Az.Compute' | ForEach-Object { Install-Module -Name $_ -AllowPrerelease -AllowClobber -Confirm }
 
 Write-Host ""
 Write-Host "Loading azd .env file from current environment"
