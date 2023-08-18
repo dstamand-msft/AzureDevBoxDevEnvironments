@@ -10,7 +10,7 @@ param galleryName string
 param location string = resourceGroup().location
 
 @sys.description('Required. The type of the image.')
-@sys.allowed(['Linux', 'Windows'])
+@sys.allowed([ 'Windows' ])
 param osType string
 
 @sys.description('Optional. Tags of the resource.')

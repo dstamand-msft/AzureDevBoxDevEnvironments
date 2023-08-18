@@ -52,7 +52,7 @@
     },  
     "imageDefinitionProperties": {
       "value": {
-        "publisher": "AzureWindows11Custom",
+        "publisher": "MyCompany",
         "offer": "MicrosoftWindowsDesktop",
         "sku": "windows-11",
         "version": "2.0.0",
