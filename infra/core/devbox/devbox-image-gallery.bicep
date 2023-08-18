@@ -80,3 +80,7 @@ module CustomImageDef '../virtual-machine-images/virtualmachineimages.bicep' = {
     ]
   }
 }
+
+
+
+

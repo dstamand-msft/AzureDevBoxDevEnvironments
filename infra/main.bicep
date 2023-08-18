@@ -180,7 +180,8 @@ output AZURE_SUBSCRIPTION_ID string = subscription().subscriptionId
 output AZURE_DEVBOX_NAME string = devBox.outputs.name
 output Azure_DEVBOX_PROJECT_NAME string = devBox.outputs.projectName
 output AZURE_DEVBOX_VNET_NAME string = vNet.outputs.vNetName
-output AZURE_DEVBOX_GALLERY_NAME string = devboxCustomGallery.name
+output AZURE_GALLERY_NAME string = devboxCustomGallery.name
 output AZURE_GALLERY_IMAGE_DEF string = imageDefinitionName
+output AZURE_IMAGE_TEMPLATE_NAME string = imageTemplateName
 output AZURE_IMAGE_BUILDER_IDENTITY string = imageBuilderIdentity
-output AZURE_GALLERY_TEMPLATE_NAME string = imageTemplateName
+

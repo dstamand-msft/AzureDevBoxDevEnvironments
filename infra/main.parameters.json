@@ -42,10 +42,10 @@
       }
     },
     "imageGaleryName": {
-      "value": "${AZURE_DEVBOX_GALLERY_NAME=DevboxGallery}"
+      "value": "${AZURE_GALLERY_NAME=DevboxGallery}"
     },
     "imageTemplateName": {
-      "value": "${AZURE_GALLERY_TEMPLATE_NAME=CustomTemplateDevImg}"
+      "value": "${AZURE_IMAGE_TEMPLATE_NAME=CustomTemplateDevImg}"
     },
     "imageDefinitionName": {
       "value": "${AZURE_GALLERY_IMAGE_DEF=customVMImageDef}"
