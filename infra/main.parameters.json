@@ -48,14 +48,14 @@
       "value": "${AZURE_GALLERY_TEMPLATE_NAME=CustomDevImgTemplate}"
     },
     "imageDefinitionName": {
-      "value": "${AZURE_GALLERY_IMAGE_DEF=customImageDef}"
+      "value": "${AZURE_GALLERY_IMAGE_DEF=customVMImageDef}"
     },  
     "imageDefinitionProperties": {
       "value": {
         "publisher": "MyCompany",
         "offer": "MyCustomDevImage",
         "sku": "windows-11",
-        "version": "2.0.0",
+        "version": "2-0-0",
         "osType": "Windows"
       }
     },
