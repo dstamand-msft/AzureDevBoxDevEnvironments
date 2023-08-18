@@ -46,7 +46,7 @@ if ($null -ne $identity) {
 }
 else {
     # Create an identity 
-    New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -Location $location
+    New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -SubscriptionId $subscriptionID -Location $location
     $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
 
     Write-Host "Check if role definition already exists..."
