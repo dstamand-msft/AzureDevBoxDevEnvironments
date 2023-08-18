@@ -164,7 +164,7 @@ module devboxCustomGallery 'core/devbox/devbox-image-gallery.bicep' = {
   name: 'DevboxGallery'
   scope: rg
   params: {
-    imageGalleryName: !empty(imageGaleryName) ? imageBuilderIdentity : '${replace(devBox.name, '[^a-zA-Z0-9]', '')}Gallery'
+    imageGalleryName: !empty(imageGaleryName) ? imageGaleryName : '${replace(devBox.name, '[^a-zA-Z0-9]', '')}Gallery'
     imageTemplateName:imageTemplateName  
     imageDefinitionName : imageDefinitionName    
     location: location        

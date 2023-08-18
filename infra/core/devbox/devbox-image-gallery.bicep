@@ -4,7 +4,6 @@ param imageTemplateName string = ''
 param imageDefinitionName string
 param imageDefinitionProperties object
 param userdIdentity string = ''
-param imageVersion string = ''
 
 // use https://learn.microsoft.com/en-us/cli/azure/vm/image?view=azure-cli-latest#az-vm-image-list
 // to find the publisher, offer, sku, version
@@ -59,7 +58,7 @@ module CustomImageDef '../virtual-machine-images/virtualmachineimages.bicep' = {
     // https://learn.microsoft.com/en-us/azure/templates/microsoft.virtualmachineimages/imagetemplates?pivots=deployment-language-bicep#imagetemplatecustomizer    
     imageSource: imageSource
     sigImageDefinitionId: imageGalleryDefinition.outputs.id
-    sigImageVersion: imageVersion
+    sigImageVersion: imageDefinitionProperties.version
     customizationSteps: [
       {
         type: 'PowerShell'

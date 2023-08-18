@@ -49,13 +49,10 @@
     },
     "imageDefinitionName": {
       "value": "${AZURE_GALLERY_IMAGE_DEF=customImageDef}"
-    },
-    "imageVersion": {
-      "value": "${AZURE_IMAGE_VERSION=2.0.0}"
-    },
+    },  
     "imageDefinitionProperties": {
       "value": {
-        "publisher": "MicrosoftWindowsDesktop",
+        "publisher": "MyCompany",
         "offer": "Windows-11",
         "sku": "win11-21h2-avd",
         "version": "latest",
