@@ -72,11 +72,11 @@ else {
         ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace 'Azure Image Builder Service Image Creation Role', $imageRoleDefName) | Set-Content -Path $aibRoleImageCreationPath 
 
     # Create a role definition 
-    New-AzRoleDefinition -InputFile  ./aibRoleImageCreation.json 
-
-    # Grant the role definition to the VM Image Builder service principal 
-    New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -SubscriptionId $subscriptionID  -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
+    New-AzRoleDefinition -InputFile  ./aibRoleImageCreation.json    
 }
+
+# Grant the role definition to the VM Image Builder service principal 
+New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -SubscriptionId $subscriptionID  -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
 
 Write-Host ""
 Write-Host "Creating image template..."
