@@ -75,5 +75,12 @@ else {
     New-AzRoleDefinition -InputFile  ./aibRoleImageCreation.json     
 }
 
-# Grant the role definition to the VM Image Builder service principal 
-New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
+# Check if role assignment already exists
+$roleAssignment = Get-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup" -ErrorAction SilentlyContinue
+if ($null -ne $roleAssignment) {
+    Write-Host "Role assignment already exists, skipping creation"    
+}
+else {
+    # Grant the role definition to the VM Image Builder service principal 
+    New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup" -ErrorAction SilentlyContinue
+}
