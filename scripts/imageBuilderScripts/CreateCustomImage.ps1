@@ -51,32 +51,31 @@ else {
     # Create an identity 
     New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -SubscriptionId $subscriptionID -Location $location
     $identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id 
-    $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId
+    $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId    
+}
 
-    Write-Host "Check if role definition already exists..."
-    # check if role definition already exists
-    $roleDef = Get-AzRoleDefinition -Name $imageRoleDefName -ErrorAction SilentlyContinue
-    if ($null -ne $roleDef) {
-        Write-Host "Role definition already exists, skipping creation"    
-    }
-    else {    
-        # Create a role definition file 
-        $aibRoleImageCreationUrl = "https://raw.githubusercontent.com/azure/azvmimagebuilder/master/solutions/12_Creating_AIB_Security_Roles/aibRoleImageCreation.json" 
-        $aibRoleImageCreationPath = "aibRoleImageCreation.json" 
+Write-Host "Check if role definition already exists..."
+# check if role definition already exists
+$roleDef = Get-AzRoleDefinition -Name $imageRoleDefName -ErrorAction SilentlyContinue
+if ($null -ne $roleDef) {
+    Write-Host "Role definition already exists, skipping creation"    
+}
+else {    
+    # Create a role definition file 
+    $aibRoleImageCreationUrl = "https://raw.githubusercontent.com/azure/azvmimagebuilder/master/solutions/12_Creating_AIB_Security_Roles/aibRoleImageCreation.json" 
+    $aibRoleImageCreationPath = "aibRoleImageCreation.json" 
 
-        # Download the configuration 
-        Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPath -UseBasicParsing 
+    # Download the configuration 
+    Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPath -UseBasicParsing 
         ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<subscriptionID>', $subscriptionID) | Set-Content -Path $aibRoleImageCreationPath 
         ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<rgName>', $imageResourceGroup) | Set-Content -Path $aibRoleImageCreationPath 
         ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace 'Azure Image Builder Service Image Creation Role', $imageRoleDefName) | Set-Content -Path $aibRoleImageCreationPath 
 
-        # Create a role definition 
-        New-AzRoleDefinition -InputFile  ./aibRoleImageCreation.json 
+    # Create a role definition 
+    New-AzRoleDefinition -InputFile  ./aibRoleImageCreation.json 
 
-        # Grant the role definition to the VM Image Builder service principal 
-        New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -SubscriptionId $subscriptionID  -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
-    }
-
+    # Grant the role definition to the VM Image Builder service principal 
+    New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -SubscriptionId $subscriptionID  -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
 }
 
 Write-Host ""
