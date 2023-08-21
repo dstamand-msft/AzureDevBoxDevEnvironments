@@ -7,6 +7,7 @@ Write-Host "Installing Packages..."
 choco install vscode -y
 choco install 7zip -y
 choco install pwsh -y
+choco install notepadplusplus -y
 choco install adobereader -y
 choco install kubernetes-cli -y
 choco install kubernetes-helm -y
