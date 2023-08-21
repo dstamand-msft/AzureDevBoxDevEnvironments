@@ -81,7 +81,7 @@ var imageReplicationRegionsVar = empty(imageReplicationRegions) ? array(location
 
 var sharedImage = {
   type: 'SharedImage'
-  galleryImageId: empty(sigImageVersion) ? sigImageDefinitionId : '${sigImageDefinitionId}/versions/${sigImageVersion}'  
+  galleryImageId: empty(sigImageVersion) ? sigImageDefinitionId : '${sigImageDefinitionId}/versions/${sigImageVersion}'
   excludeFromLatest: excludeFromLatest
   replicationRegions: imageReplicationRegionsVar
   storageAccountType: storageAccountType
@@ -123,12 +123,12 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-02-14
       vmSize: vmSize
       osDiskSizeGB: osDiskSizeGB
       userAssignedIdentities: userAssignedIdentities
-      vnetConfig: !empty(subnetId) ? vnetConfig : null
+      vnetConfig: !empty(subnetId) ? vnetConfig : null      
     }
     source: imageSource
     customize: customizationSteps
     distribute: [ sharedImage ]
-    stagingResourceGroup: stagingResourceGroup
+    stagingResourceGroup: stagingResourceGroup    
   }
 }
 

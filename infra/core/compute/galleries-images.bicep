@@ -35,6 +35,7 @@ resource galleryImage 'Microsoft.Compute/galleries/images@2022-03-03' = {
     architecture: 'x64'
     description: description
     osState: 'Generalized'
+    hyperVGeneration: 'V2'
     osType: osType
     identifier: {
       publisher: imageDefinitionProperties.publisher

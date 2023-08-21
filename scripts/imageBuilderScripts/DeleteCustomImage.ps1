@@ -46,7 +46,7 @@ if ($null -eq $imageTemplate) {
     write-host "Image template does not exist, skipping deletion"
 }
 else {
-    Remove-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imageTemplateName -Force
+    Remove-AzImageBuilderTemplate -ResourceGroupName $imageResourceGroup -Name $imageTemplateName
 }
 
 Write-Host ""

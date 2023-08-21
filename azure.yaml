@@ -19,15 +19,15 @@ hooks:
   preprovision:
     windows:
       shell: pwsh
-      run: ./scripts/imageBuilderScripts/CreateImageBuilderIdentity.ps1
+      run: ./scripts/imageBuilderScripts/DeleteCustomImage.ps1
       interactive: true
       continueOnError: false
     posix:
       shell: pwsh
-      run: ./scripts/imageBuilderScripts/CreateImageBuilderIdentity.ps1
+      run: ./scripts/imageBuilderScripts/DeleteCustomImage.ps1
       interactive: true
       continueOnError: false
-    
+
   postprovision:
     windows:
       shell: pwsh
