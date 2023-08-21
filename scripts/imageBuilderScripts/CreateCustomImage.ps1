@@ -2,7 +2,7 @@ Write-Host ""
 Write-Host "Installing required Az modules..."
 Write-Host ""
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
-'Az.Resources', 'Az.ImageBuilder', 'Az.ManagedServiceIdentity', 'Az.Compute' | ForEach-Object { Install-Module -Name $_ -AllowClobber -Confirm:$false }
+'Az.Resources', 'Az.ImageBuilder', 'Az.ManagedServiceIdentity', 'Az.Compute' | ForEach-Object { Install-Module -Name $_ -AllowClobber -Force -Confirm:$false }
 
 Write-Host ""
 Write-Host "Loading azd .env file from current environment"
