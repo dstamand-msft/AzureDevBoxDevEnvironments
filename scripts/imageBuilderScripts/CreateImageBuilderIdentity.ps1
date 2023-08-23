@@ -1,8 +1,21 @@
 Write-Host ""
-Write-Host "Installing required Az modules..."
+Write-Host "Installing required Az modules..." -ForegroundColor Cyan
 Write-Host ""
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
-'Az.Resources', 'Az.ImageBuilder', 'Az.ManagedServiceIdentity', 'Az.Compute' | ForEach-Object { Install-Module -Name $_ -AllowClobber -Force }
+'Az.Resources', 'Az.ImageBuilder', 'Az.Compute' | ForEach-Object { 
+    if (Get-Module -ListAvailable -Name $_) {
+        Write-Host "$_ Already installed"
+    } 
+    else {
+        try {
+            Install-Module -Name $_ -AllowClobber -Confirm:$False -Force  
+        }
+        catch [Exception] {
+            $_.message 
+            exit
+        }
+    }    
+}
 
 Write-Host ""
 Write-Host "Loading azd .env file from current environment"
