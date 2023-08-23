@@ -24,6 +24,9 @@
       "value": "${AZURE_DEVBOX_VNET_NAME=kaydevbox-vnet}"
     },
     "deployVnet": {
+      "value": false
+    },
+    "deployCustomImage": {
       "value": true
     },
     "devboxRbac": {
@@ -49,7 +52,7 @@
     },
     "imageDefinitionName": {
       "value": "${AZURE_GALLERY_IMAGE_DEF=customVMImageDef}"
-    },  
+    },
     "imageDefinitionProperties": {
       "value": {
         "publisher": "MyCompany",

@@ -9,7 +9,7 @@ hooks:
       shell: pwsh
       run:  ./scripts/imageBuilderScripts/CreateImageBuilderIdentity.ps1; ./scripts/imageBuilderScripts/DeleteCustomImage.ps1
       interactive: true
-      continueOnError: false
+      continueOnError: true
 
 
     posix:

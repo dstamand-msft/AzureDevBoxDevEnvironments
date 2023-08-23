@@ -33,18 +33,23 @@ $imageDefName = "$env:AZURE_GALLERY_IMAGE_DEF"
 
 # check if resource workingRessourceGroup group is set or empty before continuing
 if ($null -eq $workingRessourceGroup || $workingRessourceGroup -eq "") {
-    Write-Host "ResourceGroup group not set, exiting..."
+    Write-Host "ResourceGroup group not set, exiting..." -ForegroundColor Gray
+    exit 0
+}
+
+# check if Gallery Name and Image template name is set or empty before continuing
+if ($null -eq $galleryName || $galleryName -eq "" -or $null -eq $imageTemplateName || $imageTemplateName -eq "") {
+    Write-Host "Gallery Name or Image template name not set in current environement, exiting..."  -ForegroundColor Gray
     exit 0
 }
 
 Write-Host ""
-Write-Host "Deleting image template..."
-
+Write-Host "Deleting image template..."  
 # Delete the image template
 # check if image template already exists
 $imageTemplate = Get-AzImageBuilderTemplate -ResourceGroupName $workingRessourceGroup -Name $imageTemplateName -ErrorAction SilentlyContinue
 if ($null -eq $imageTemplate) {
-    write-host "Image template does not exist, skipping deletion"
+    write-host "Image template does not exist, skipping deletion" -ForegroundColor Yellow
 }
 else {
     Remove-AzImageBuilderTemplate -ResourceGroupName $workingRessourceGroup -Name $imageTemplateName
@@ -54,7 +59,7 @@ Write-Host ""
 Write-Host "Deleting image Gallery definition ..."
 $gallery = Get-AzGallery -ResourceGroupName $workingRessourceGroup -Name $galleryName -ErrorAction SilentlyContinue
 if ($null -eq $gallery) {
-    Write-Host "Gallery does not exist, skipping deletion"
+    Write-Host "Gallery does not exist, skipping deletion" -ForegroundColor Yellow
     exit 0
 }
 
@@ -62,10 +67,10 @@ if ($null -eq $gallery) {
 # check if image definition already exists
 $imageDef = Get-AzGalleryImageDefinition -ResourceGroupName $workingRessourceGroup -GalleryName $galleryName -GalleryImageDefinitionName $imageDefName -ErrorAction SilentlyContinue
 if ($null -eq $imageDef) {
-    Write-Host "Image definition does not exist, skipping deletion"
+    Write-Host "Image definition does not exist, skipping deletion" -ForegroundColor Yellow
     exit 0
 }
 Remove-AzGalleryImageDefinition -ResourceGroupName $workingRessourceGroup -GalleryName $galleryName -GalleryImageDefinitionName $imageDefName -ErrorAction SilentlyContinue
 
-Write-Host "${imageDefName}: Image template deleting complete."
+Write-Host "${imageDefName}: Image template deleting complete." -ForegroundColor Green
 

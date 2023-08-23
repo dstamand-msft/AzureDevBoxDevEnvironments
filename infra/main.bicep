@@ -50,6 +50,9 @@ param imageDefinitionProperties object
 @description('Image builder user identity')
 param imageBuilderIdentity string = ''
 
+@description('Deploy custom image gallery')
+param deployCustomImage bool = true
+
 
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
@@ -100,6 +103,10 @@ module devBox 'core/devbox/devbox.bicep' = {
     rsToken: resourceToken
   }
 }
+
+output AZURE_DEVBOX_NAME string = devBox.outputs.name
+output Azure_DEVBOX_PROJECT_NAME string = devBox.outputs.projectName
+output AZURE_DEVBOX_VNET_NAME string = vNet.outputs.vNetName
 
 // Give the DevCenter access to KeyVault
 module keyVaultAccess './core/security/keyvault-access.bicep' = if (empty(keyVaultPatSecretUri)) {
@@ -160,7 +167,7 @@ module devBoxCatalog 'core/devbox/devbox-catalog.bicep' = {
 }
 
 // add Image gallery
-module devboxCustomGallery 'core/devbox/devbox-image-gallery.bicep' = {
+module devboxCustomGallery 'core/devbox/devbox-image-gallery.bicep' = if(deployCustomImage) {
   name: 'DevboxGallery'
   scope: rg
   params: {
@@ -177,11 +184,5 @@ output AZURE_LOCATION string = location
 output AZURE_RESOURCE_GROUP string = rg.name
 output AZURE_TENANT_ID string = tenant().tenantId
 output AZURE_SUBSCRIPTION_ID string = subscription().subscriptionId
-output AZURE_DEVBOX_NAME string = devBox.outputs.name
-output Azure_DEVBOX_PROJECT_NAME string = devBox.outputs.projectName
-output AZURE_DEVBOX_VNET_NAME string = vNet.outputs.vNetName
-output AZURE_GALLERY_NAME string = devboxCustomGallery.name
-output AZURE_GALLERY_IMAGE_DEF string = imageDefinitionName
-output AZURE_IMAGE_TEMPLATE_NAME string = imageTemplateName
 output AZURE_IMAGE_BUILDER_IDENTITY string = imageBuilderIdentity
 
