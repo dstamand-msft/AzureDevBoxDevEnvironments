@@ -44,13 +44,22 @@ azd env set AZURE_SUBSCRIPTION_ID="************************************"
 azd env set keyVaultPatSecretValue="***********************************"
 ```
 
-2. Change the property deployVnet to true if you VNET doesn't exists
+2. Change the property deployVnet to **true** if you want to create a new VNET
 
 ```JSON
  "deployVnet": {
     "value": true
  },
 ```
+
+3. If you want to deploy custom Image Template with your DevCenter Change the property deployCustomImage to **true** otherwise keep it as **false**
+
+```JSON
+ "deployCustomImage": {
+    "value": true
+ },
+```
+
 
 3. Run `azd up` - This will provision Azure resources and deploy this sample to those resources.
 
