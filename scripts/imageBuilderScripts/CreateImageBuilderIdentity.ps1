@@ -4,7 +4,7 @@ Write-Host ""
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
 'Az.Resources', 'Az.ImageBuilder', 'Az.Compute' | ForEach-Object { 
     if (Get-Module -ListAvailable -Name $_) {
-        Write-Host "$_ Already installed"
+        Write-Host "$_ Already installed" -ForegroundColor Yellow 
     } 
     else {
         try {
@@ -12,7 +12,7 @@ Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
         }
         catch [Exception] {
             $_.message 
-            exit
+            exit 1
         }
     }    
 }
