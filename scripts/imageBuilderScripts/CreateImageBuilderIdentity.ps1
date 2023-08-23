@@ -34,11 +34,17 @@ $location = "$env:AZURE_LOCATION"
 $identityName = "$env:AZURE_IMAGE_BUILDER_IDENTITY"
 $imageRoleDefName = "Azure Image Builder Image Def " + $identityName 
 
-
-# check if resource resourceGroupName group is set before continuing
-if ($null -eq $resourceGroupName) {
-    Write-Host "ResourceGroup group not set, exiting..."
+# check if subscription is set before continuing
+if ($null -eq $subscriptionID) {
+    Write-Host "Subscription not set, exiting..."
     exit 0
+}
+
+#check if resource group exists and create it if not
+$resourceGroup = Get-AzResourceGroup -Name $resourceGroupName -ErrorAction SilentlyContinue
+if ($null -eq $resourceGroup) {
+    Write-Host "Resource group not found, creating..."
+    New-AzResourceGroup -Name $resourceGroupName -Location $location
 }
 
 #Check if the identity already exists
