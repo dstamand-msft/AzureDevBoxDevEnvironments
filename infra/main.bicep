@@ -34,7 +34,6 @@ param poolNames array = [{name: 'DevPool', enableLocalAdmin: true, schedule: {},
 // use az devbox admin sku list for the storage and skus. Sku is the name parameter and storage is the capabilities.value where the name is OsDiskTypes
 param definitions array = [{name: 'DeveloperBox', sku: '', storage: ''}, {name: 'QABox', sku: '', storage: ''}]
 
-
 @description('The name of the image template in the image gallery')
 param imageGaleryName string = ''
 
@@ -51,7 +50,7 @@ param imageDefinitionProperties object
 param imageBuilderIdentity string = ''
 
 @description('Deploy custom image gallery')
-param deployCustomImage bool = true
+param deployCustomImage bool
 
 
 var abbrs = loadJsonContent('./abbreviations.json')
