@@ -7,25 +7,23 @@ hooks:
   preprovision:
     windows:
       shell: pwsh
-      run:  ./scripts/imageBuilderScripts/CreateImageBuilderIdentity.ps1; ./scripts/imageBuilderScripts/DeleteCustomImage.ps1
+      run:  ./scripts/imageBuilderScripts/CreateImageBuilderIdentity.ps1; ./scripts/imageBuilderScripts/DeleteCustomImageTemplate.ps1
       interactive: true
-      continueOnError: true
-
-
+      continueOnError: false
     posix:
       shell: pwsh
-      run: ./scripts/imageBuilderScripts/CreateImageBuilderIdentity.ps1; ./scripts/imageBuilderScripts/DeleteCustomImage.ps1
+      run: ./scripts/imageBuilderScripts/CreateImageBuilderIdentity.ps1; ./scripts/imageBuilderScripts/DeleteCustomImageTemplate.ps1
       interactive: true
       continueOnError: false
 
   postprovision:
     windows:
       shell: pwsh
-      run: 'Invoke-AzResourceAction  -ResourceName $env:AZURE_GALLERY_TEMPLATE_NAME  -ResourceGroupName $env:AZURE_RESOURCE_GROUP  -ResourceType Microsoft.VirtualMachineImages/imageTemplates  -ApiVersion "2020-02-14"  -Action Run'
+      run: './scripts/imageBuilderScripts/BuildCustomImageTemplate.ps1'
       interactive: true
       continueOnError: false
     posix:
       shell: pwsh
-      run: 'Invoke-AzResourceAction  -ResourceName $env:AZURE_GALLERY_TEMPLATE_NAME  -ResourceGroupName $env:AZURE_RESOURCE_GROUP  -ResourceType Microsoft.VirtualMachineImages/imageTemplates  -ApiVersion "2020-02-14"  -Action Run'
+      run: './scripts/imageBuilderScripts/BuildCustomImageTemplate.ps1'
       interactive: true
       continueOnError: false

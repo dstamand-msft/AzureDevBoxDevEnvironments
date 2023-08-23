@@ -43,9 +43,6 @@ module imageGalleryDefinition '../compute/galleries-images.bicep' = {
   }
 }
 
-output AZURE_GALLERY_NAME string = devboxImageGallery.name
-output AZURE_GALLERY_IMAGE_DEF string = imageDefinitionName
-
 resource userImgBuilderIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: userdIdentity
   location: location
@@ -83,8 +80,5 @@ module CustomImageDef '../virtual-machine-images/virtualmachineimages.bicep' = {
     ]
   }
 }
-
-output AZURE_IMAGE_TEMPLATE_NAME string = imageTemplateName
-
 
 

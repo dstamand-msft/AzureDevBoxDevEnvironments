@@ -184,4 +184,7 @@ output AZURE_RESOURCE_GROUP string = rg.name
 output AZURE_TENANT_ID string = tenant().tenantId
 output AZURE_SUBSCRIPTION_ID string = subscription().subscriptionId
 output AZURE_IMAGE_BUILDER_IDENTITY string = imageBuilderIdentity
+output AZURE_GALLERY_NAME string = devboxCustomGallery.name
+output AZURE_GALLERY_IMAGE_DEF string = imageDefinitionName
+output AZURE_GALLERY_TEMPLATE_NAME string = imageTemplateName
 

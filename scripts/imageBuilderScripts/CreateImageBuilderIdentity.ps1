@@ -2,7 +2,7 @@ Write-Host ""
 Write-Host "Installing required Az modules..."
 Write-Host ""
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
-'Az.Resources', 'Az.ImageBuilder', 'Az.ManagedServiceIdentity', 'Az.Compute' | ForEach-Object { Install-Module -Name $_ -AllowClobber -Force -Confirm:$false }
+'Az.Resources', 'Az.ImageBuilder', 'Az.ManagedServiceIdentity', 'Az.Compute' | ForEach-Object { Install-Module -Name $_ -AllowClobber -Force }
 
 Write-Host ""
 Write-Host "Loading azd .env file from current environment"
@@ -21,7 +21,6 @@ foreach ($line in $output) {
 Write-Host ""
 Write-Host "Environment variables set."
 Write-Host ""
-
  
 # Get your current subscription ID  
 $subscriptionID = "$env:AZURE_SUBSCRIPTION_ID"
