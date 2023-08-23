@@ -36,6 +36,11 @@ resource galleryImage 'Microsoft.Compute/galleries/images@2022-03-03' = {
     description: description
     osState: 'Generalized'
     hyperVGeneration: 'V2'
+    features: [ {
+        name: 'SecurityType'
+        value: 'TrustedLaunch'
+      }
+    ]
     osType: osType
     identifier: {
       publisher: imageDefinitionProperties.publisher

@@ -27,7 +27,7 @@
       "value": false
     },
     "deployCustomImage": {
-      "value": false
+      "value": true
     },
     "devboxRbac": {
       "value": {
@@ -58,7 +58,7 @@
         "publisher": "MyCompany",
         "offer": "MyCustomDevImage",
         "sku": "windows-11",
-        "version": "2.0.0",
+        "version": "3.0.0",
         "osType": "Windows",
         "hyperVGeneration": "V2"
       }
