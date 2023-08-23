@@ -34,7 +34,18 @@ You can run this repo virtually by using GitHub Codespaces or VS Code Remote Con
 
 Execute the following command, if you don't have any pre-existing Azure services and want to start from a fresh deployment.
 
-1. Run `azd up` - This will provision Azure resources and deploy this sample to those resources.
+1. Set variables values for your first run :
+
+```powershell
+azd env set AZURE_ENV_NAME="YOUR ENVIRONNEMENT NAME"
+azd env set AZURE_IMAGE_BUILDER_IDENTITY="IMAGE BUILDER IDENTITY NAME"
+azd env set AZURE_LOCATION="LOCATION"
+azd env set AZURE_RESOURCE_GROUP="YOUR RESOURCE GROUP NAME"
+azd env set AZURE_SUBSCRIPTION_ID="************************************"
+azd env set keyVaultPatSecretValue="***********************************"
+```
+
+2. Run `azd up` - This will provision Azure resources and deploy this sample to those resources.
  
 #### Using existing resources
 

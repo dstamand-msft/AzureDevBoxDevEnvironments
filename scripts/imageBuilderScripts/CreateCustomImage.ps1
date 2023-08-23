@@ -25,7 +25,7 @@ Write-Host ""
 # Get your current subscription ID  
 $subscriptionID = "$env:AZURE_SUBSCRIPTION_ID"
 # Destination image resource group  
-$imageResourceGroup = "$env:AZURE_RESOURCE_GROUP"
+$resourceGroupName = "$env:AZURE_RESOURCE_GROUP"
 # Location  
 $location = "$env:AZURE_LOCATION"
 
@@ -38,7 +38,7 @@ Write-Host ""
 Write-Host "Check if the identity already exists..."
 Write-Host ""
 
-$identity = Get-AzUserAssignedIdentity -SubscriptionId $subscriptionID -ResourceGroupName $imageResourceGroup -Name $identityName -ErrorAction SilentlyContinue
+$identity = Get-AzUserAssignedIdentity -SubscriptionId $subscriptionID -ResourceGroupName $resourceGroupName -Name $identityName -ErrorAction SilentlyContinue
 $identityNameResourceId = $null
 $identityNamePrincipalId = $null
 
@@ -49,9 +49,9 @@ if ($null -ne $identity) {
 }
 else {
     # Create an identity 
-    New-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName -SubscriptionId $subscriptionID -Location $location
-    $identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).Id 
-    $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $imageResourceGroup -Name $identityName).PrincipalId    
+    New-AzUserAssignedIdentity -ResourceGroupName $resourceGroupName -Name $identityName -SubscriptionId $subscriptionID -Location $location
+    $identityNameResourceId = $(Get-AzUserAssignedIdentity -ResourceGroupName $resourceGroupName -Name $identityName).Id 
+    $identityNamePrincipalId = $(Get-AzUserAssignedIdentity -ResourceGroupName $resourceGroupName -Name $identityName).PrincipalId    
 }
 
 Write-Host "Check if role definition already exists..."
@@ -68,7 +68,7 @@ else {
     # Download the configuration 
     Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPath -UseBasicParsing 
         ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<subscriptionID>', $subscriptionID) | Set-Content -Path $aibRoleImageCreationPath 
-        ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<rgName>', $imageResourceGroup) | Set-Content -Path $aibRoleImageCreationPath 
+        ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<rgName>', $resourceGroupName) | Set-Content -Path $aibRoleImageCreationPath 
         ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace 'Azure Image Builder Service Image Creation Role', $imageRoleDefName) | Set-Content -Path $aibRoleImageCreationPath 
 
     # Create a role definition 
@@ -76,7 +76,7 @@ else {
 }
 
 # Grant the role definition to the VM Image Builder service principal 
-New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -SubscriptionId $subscriptionID  -Scope "/subscriptions/$subscriptionID/resourceGroups/$imageResourceGroup"
+New-AzRoleAssignment -ObjectId $identityNamePrincipalId -RoleDefinitionName $imageRoleDefName -SubscriptionId $subscriptionID  -Scope "/subscriptions/$subscriptionID/resourceGroups/$resourceGroupName"
 
 Write-Host ""
 Write-Host "Creating image template..."
@@ -99,20 +99,20 @@ $replRegion2 = "eastus"
 
 # Create the gallery 
 #check is gallery already exists 
-$gallery = Get-AzGallery -ResourceGroupName $imageResourceGroup -Name $galleryName -ErrorAction SilentlyContinue
+$gallery = Get-AzGallery -ResourceGroupName $resourceGroupName -Name $galleryName -ErrorAction SilentlyContinue
 if ($null -ne $gallery) {
     Write-Host "Gallery already exists, skipping creation"
 }
 else {
     Write-Host "Creating gallery..."
-    New-AzGallery -GalleryName $galleryName -ResourceGroupName $imageResourceGroup -Location $location 
+    New-AzGallery -GalleryName $galleryName -ResourceGroupName $resourceGroupName -Location $location 
 }
 
 $SecurityType = @{Name = 'SecurityType'; Value = 'TrustedLaunch' } 
 $features = @($SecurityType) 
 $Sku = "2-0-0"
 
-New-AzGalleryImageDefinition -GalleryName $galleryName -ResourceGroupName $imageResourceGroup -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCompany' -Offer 'vscodebox' -Sku $Sku -Feature $features -HyperVGeneration "V2"
+New-AzGalleryImageDefinition -GalleryName $galleryName -ResourceGroupName $resourceGroupName -Location $location -Name $imageDefName -OsState generalized -OsType Windows -Publisher 'myCompany' -Offer 'vscodebox' -Sku $Sku -Feature $features -HyperVGeneration "V2"
 
 # Configure the template with your variables:
 $cwd = (Get-Location)
@@ -122,7 +122,7 @@ Copy-Item "$cwd/scripts/imageBuilderScripts/CustomImageTemplate.src.json" "$cwd/
 $templateFilePath = "$cwd/CustomImageTemplate.json"
 
 (Get-Content -path $templateFilePath -Raw ) -replace '<subscriptionID>', $subscriptionID | Set-Content -Path $templateFilePath 
-(Get-Content -path $templateFilePath -Raw ) -replace '<rgName>', $imageResourceGroup | Set-Content -Path $templateFilePath 
+(Get-Content -path $templateFilePath -Raw ) -replace '<rgName>', $resourceGroupName | Set-Content -Path $templateFilePath 
 (Get-Content -path $templateFilePath -Raw ) -replace '<runOutputName>', $runOutputName | Set-Content -Path $templateFilePath  
 (Get-Content -path $templateFilePath -Raw ) -replace '<imageDefName>', $imageDefName | Set-Content -Path $templateFilePath  
 (Get-Content -path $templateFilePath -Raw ) -replace '<sharedImageGalName>', $galleryName | Set-Content -Path $templateFilePath  
@@ -132,17 +132,17 @@ $templateFilePath = "$cwd/CustomImageTemplate.json"
 
 # Create the image version.
 Write-Host "Creating image version..."
-New-AzResourceGroupDeployment  -ResourceGroupName $imageResourceGroup  -TemplateFile $templateFilePath  -Api-Version "2020-02-14"  -imageTemplateName $imageTemplateName  -svclocation $location
+New-AzResourceGroupDeployment  -ResourceGroupName $resourceGroupName  -TemplateFile $templateFilePath  -Api-Version "2020-02-14"  -imageTemplateName $imageTemplateName  -svclocation $location
 
 # Run the image template
 Write-Host "Running image template..."
-Invoke-AzResourceAction  -ResourceName $imageTemplateName  -ResourceGroupName $imageResourceGroup  -ResourceType Microsoft.VirtualMachineImages/imageTemplates  -ApiVersion "2020-02-14"  -Action Run
+Invoke-AzResourceAction  -ResourceName $imageTemplateName  -ResourceGroupName $resourceGroupName  -ResourceType Microsoft.VirtualMachineImages/imageTemplates  -ApiVersion "2020-02-14"  -Action Run
 
 # Monitor the image template run
 # While LastRunStatusRunState is not Succeeded or Failed, keep monitoring
 $runStatus = $null
 while ($runStatus -ne "Succeeded" -and $runStatus -ne "Failed") {
-    $runStatus = (Get-AzImageBuilderTemplate -ImageTemplateName $imageTemplateName -ResourceGroupName $imageResourceGroup).LastRunStatusRunState
+    $runStatus = (Get-AzImageBuilderTemplate -ImageTemplateName $imageTemplateName -ResourceGroupName $resourceGroupName).LastRunStatusRunState
     Write-Host "Status:$runStatus <=> Monitoring image template run..."
     Start-Sleep -s 30
 }
