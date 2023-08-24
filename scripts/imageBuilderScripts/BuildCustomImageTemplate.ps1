@@ -71,13 +71,20 @@ if ($null -eq $galleryName || $galleryName -eq "" -or $null -eq $imageTemplateNa
 Write-Host "Running image template..." 
 Invoke-AzResourceAction -ResourceGroupName $resourceGroupName -ResourceName $imageTemplateName -ResourceType Microsoft.VirtualMachineImages/imageTemplates -ApiVersion "2020-02-14"  -Action Run -Force -ErrorAction SilentlyContinue
 
-# Monitor the image template run
-# While LastRunStatusRunState is not Succeeded or Failed, keep monitoring
-$runStatus = $null
-while ($runStatus -ne "Succeeded" -and $runStatus -ne "Failed") {
+
+$title = 'Monitor the image template Build'
+$msg = 'Do you want to continue monitoring image template build ?'
+$options = '&Yes', '&No'
+$default = 0  # 0=Yes, 1=No
+do {
     $runStatus = (Get-AzImageBuilderTemplate -ImageTemplateName $imageTemplateName -ResourceGroupName $resourceGroupName).LastRunStatusRunState
     Write-Host "Monitoring image template status:$runStatus" -ForegroundColor Yellow
     Start-Sleep -s 30
-}
+    $response = $Host.UI.PromptForChoice($title, $msg, $options, $default)
+    if ($response -eq 1) {
+        break
+    }
 
+} while ($response -eq 0 -and $runStatus -ne "Succeeded" -and $runStatus -ne "Failed")
+ 
 Write-Host "Image template run complete." -ForegroundColor Green
