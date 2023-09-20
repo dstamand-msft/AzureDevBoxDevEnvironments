@@ -16,14 +16,6 @@ var imageSource = {
   baseOs: 'win11multi'
 }
 
-// var imageSourceWSL = {
-//   type: 'PlatformImage'
-//   publisher: 'Canonical'
-//   offer: '0001-com-ubuntu-server-jammy'
-//   sku: '22_04-lts'
-//   version: 'latest'
-// }
-
 module devboxImageGallery '../compute/galleries.bicep' = {
   name: 'imageGallery'
   params: {
@@ -63,7 +55,7 @@ module CustomImageDef '../virtual-machine-images/virtualmachineimages.bicep' = {
       {
         type: 'PowerShell'
         name: 'customscript'
-        scriptUri: 'https://raw.githubusercontent.com/Keayoub/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/installDevToolsImage.ps1'
+        scriptUri: 'https://raw.githubusercontent.com/dstamand-msft/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/installDevToolsImage.ps1'
         runElevated: true
         runAsSystem: true
       }
@@ -73,7 +65,7 @@ module CustomImageDef '../virtual-machine-images/virtualmachineimages.bicep' = {
       {
         type: 'PowerShell'
         name: 'customscript'
-        scriptUri: 'https://raw.githubusercontent.com/Keayoub/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/Run-app.ps1'
+        scriptUri: 'https://raw.githubusercontent.com/dstamand-msft/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/Run-app.ps1'
         runElevated: true
         runAsSystem: true
       }

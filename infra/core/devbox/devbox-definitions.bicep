@@ -1,6 +1,6 @@
 param location string = resourceGroup().location
 param devBoxName string
-param definitions array 
+param definitions array
 param galleryName string = 'Default'
 
 @allowed(['win11', 'vs2022win11m365'])
@@ -46,7 +46,7 @@ resource devboxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@202
     }
     imageReference: {
       id: galleryimage.id
-    }    
+    }
     osStorageType: !empty(item.storage) ? item.storage: defaultMachineStorage
     hibernateSupport: 'Disabled'
   }

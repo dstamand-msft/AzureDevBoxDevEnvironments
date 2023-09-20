@@ -123,12 +123,12 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-02-14
       vmSize: vmSize
       osDiskSizeGB: osDiskSizeGB
       userAssignedIdentities: userAssignedIdentities
-      vnetConfig: !empty(subnetId) ? vnetConfig : null      
+      vnetConfig: !empty(subnetId) ? vnetConfig : null
     }
     source: imageSource
     customize: customizationSteps
     distribute: [ sharedImage ]
-    stagingResourceGroup: stagingResourceGroup    
+    stagingResourceGroup: stagingResourceGroup
   }
 }
 

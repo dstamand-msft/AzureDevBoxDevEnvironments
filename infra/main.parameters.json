@@ -21,17 +21,17 @@
       "value": "${AZURE_DEVBOX_PROJECT_NAME=demo-project}"
     },
     "virtualNetworkName": {
-      "value": "${AZURE_DEVBOX_VNET_NAME=kaydevbox-vnet}"
+      "value": "${AZURE_DEVBOX_VNET_NAME=devbox-vnet}"
     },
     "deployVnet": {
       "value": false
     },
     "deployCustomImage": {
-      "value": true
+      "value": false
     },
     "devboxRbac": {
       "value": {
-        "principalId": "bb289c05-9dbe-4946-8e8a-f4b7d092cb3d",
+        "principalId": "e89b51f1-a6d5-4a6e-82a8-ab36c6137df3",
         "roleType": "Group"
       }
     },
@@ -39,7 +39,7 @@
       "value": {
         "name": "SampleCatalog",
         "repositoryType": "gitHub",
-        "uri": "https://github.com/Keayoub/AzureDevBoxDevEnvironments.git",
+        "uri": "https://github.com/${GITHUB_ORG_NAME}/AzureDevBoxDevEnvironments.git",
         "branch": "main",
         "path": "/environments"
       }
@@ -64,7 +64,7 @@
       }
     },
     "imageBuilderIdentity": {
-      "value": "${AZURE_IMAGE_BUILDER_IDENTITY=aibIdentity1692203420}"
+      "value": "${AZURE_IMAGE_BUILDER_IDENTITY}"
     }
   }
 }
