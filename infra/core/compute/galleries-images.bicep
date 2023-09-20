@@ -10,7 +10,7 @@ param galleryName string
 param location string = resourceGroup().location
 
 @sys.description('Required. The type of the image.')
-@sys.allowed(['Linux', 'Windows'])
+@sys.allowed([ 'Windows' ])
 param osType string
 
 @sys.description('Optional. Tags of the resource.')
@@ -35,6 +35,12 @@ resource galleryImage 'Microsoft.Compute/galleries/images@2022-03-03' = {
     architecture: 'x64'
     description: description
     osState: 'Generalized'
+    hyperVGeneration: 'V2'
+    features: [ {
+        name: 'SecurityType'
+        value: 'TrustedLaunch'
+      }
+    ]
     osType: osType
     identifier: {
       publisher: imageDefinitionProperties.publisher

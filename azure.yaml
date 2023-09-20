@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: AzureDevBoxDevEnvironments
+infra:
+  provider: bicep
+hooks:
+  preprovision:
+    windows:
+      shell: pwsh
+      run:  ./scripts/imageBuilderScripts/CreateImageBuilderIdentity.ps1; ./scripts/imageBuilderScripts/DeleteCustomImageTemplate.ps1
+      interactive: true
+      continueOnError: false
+    posix:
+      shell: pwsh
+      run: ./scripts/imageBuilderScripts/CreateImageBuilderIdentity.ps1; ./scripts/imageBuilderScripts/DeleteCustomImageTemplate.ps1
+      interactive: true
+      continueOnError: false
+
+  postprovision:
+    windows:
+      shell: pwsh
+      run: './scripts/imageBuilderScripts/BuildCustomImageTemplate.ps1'
+      interactive: true
+      continueOnError: false
+    posix:
+      shell: pwsh
+      run: './scripts/imageBuilderScripts/BuildCustomImageTemplate.ps1'
+      interactive: true
+      continueOnError: false

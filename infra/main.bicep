@@ -20,16 +20,38 @@ param devboxRbac object
 @description('The artifcats catalog to add')
 param catalog object
 
-param vNetName string = ''
+param virtualNetworkName string = ''
 param keyVaultPatSecretUri string = ''
 param keyVaultName string = ''
+
+@description('The secret value for the PAT. If the keyVaultPatSecretUri is provided, this is not needed')
 @secure()
 param keyVaultPatSecretValue string = ''
+
 param devBoxName string = ''
-param projectName string = 'Contoso-University'
+param projectName string = ''
 param poolNames array = [{name: 'DevPool', enableLocalAdmin: true, schedule: {}, definition: 'DeveloperBox'}, {name: 'QAPool', enableLocalAdmin: false, schedule: {time: '19:00', timeZone: 'America/Toronto'}, definition: 'QABox'}]
 // use az devbox admin sku list for the storage and skus. Sku is the name parameter and storage is the capabilities.value where the name is OsDiskTypes
 param definitions array = [{name: 'DeveloperBox', sku: '', storage: ''}, {name: 'QABox', sku: '', storage: ''}]
+
+@description('The name of the image template in the image gallery')
+param imageGaleryName string = ''
+
+@description('The name of the image template in the image gallery')
+param imageTemplateName string = ''
+
+@description('The name of the image definition in the image gallery.')
+param imageDefinitionName string = ''
+
+@description('The properties of the image definition in the image gallery.')
+param imageDefinitionProperties object
+
+@description('Image builder user identity')
+param imageBuilderIdentity string = ''
+
+@description('Deploy custom image gallery')
+param deployCustomImage bool
+
 
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
@@ -37,7 +59,7 @@ var keyVaultPatSecretName = 'REPO-PAT'
 
 // Organize resources in a resource group
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: resourceGroupName
+  name: !empty(resourceGroupName) ? resourceGroupName : '${abbrs.resourcesResourceGroups}${environmentName}'
   location: location
 }
 
@@ -45,12 +67,11 @@ module vNet 'core/networking/virtualnetwork.bicep' = {
   name: 'virtualNetwork'
   scope: rg
   params:{
-    name: !empty(vNetName) ? vNetName : '${abbrs.networkVirtualNetworks}${resourceToken}'
+    name: !empty(virtualNetworkName) ? virtualNetworkName : '${abbrs.networkVirtualNetworks}${resourceToken}'
     location: location
     deployVnet: deployVnet
   }
 }
-
 module keyVault 'core/security/keyvault.bicep' = if (empty(keyVaultPatSecretUri)) {
   name: 'keyVault'
   scope: rg
@@ -71,15 +92,20 @@ module keyVaultSecret 'core/security/keyvault-secret.bicep' = if (empty(keyVault
 }
 
 module devBox 'core/devbox/devbox.bicep' = {
-  name: 'devBox'
+  name: devBoxName
   scope: rg
   params: {
     name: !empty(devBoxName) ? devBoxName : '${abbrs.devbox}${resourceToken}'
     location: location
-    projectName: projectName
+    projectName: !empty(projectName) ? projectName : '${abbrs.devbox}-project'
     vNetName: vNet.outputs.vNetName
+    rsToken: resourceToken
   }
 }
+
+output AZURE_DEVBOX_NAME string = devBox.outputs.name
+output Azure_DEVBOX_PROJECT_NAME string = devBox.outputs.projectName
+output AZURE_DEVBOX_VNET_NAME string = vNet.outputs.vNetName
 
 // Give the DevCenter access to KeyVault
 module keyVaultAccess './core/security/keyvault-access.bicep' = if (empty(keyVaultPatSecretUri)) {
@@ -138,3 +164,27 @@ module devBoxCatalog 'core/devbox/devbox-catalog.bicep' = {
     patKeyVaultUri: empty(keyVaultPatSecretUri) ? keyVaultSecret.outputs.secretUri : keyVaultPatSecretUri
   }
 }
+
+// add Image gallery
+module devboxCustomGallery 'core/devbox/devbox-image-gallery.bicep' = if(deployCustomImage) {
+  name: 'DevboxGallery'
+  scope: rg
+  params: {
+    imageGalleryName: !empty(imageGaleryName) ? imageGaleryName : '${replace(devBox.name, '[^a-zA-Z0-9]', '')}Gallery'
+    imageTemplateName:imageTemplateName  
+    imageDefinitionName : imageDefinitionName    
+    location: location        
+    imageDefinitionProperties:imageDefinitionProperties            
+    userdIdentity: imageBuilderIdentity
+  }
+}
+
+output AZURE_LOCATION string = location
+output AZURE_RESOURCE_GROUP string = rg.name
+output AZURE_TENANT_ID string = tenant().tenantId
+output AZURE_SUBSCRIPTION_ID string = subscription().subscriptionId
+output AZURE_IMAGE_BUILDER_IDENTITY string = imageBuilderIdentity
+output AZURE_GALLERY_NAME string = devboxCustomGallery.name
+output AZURE_GALLERY_IMAGE_DEF string = imageDefinitionName
+output AZURE_GALLERY_TEMPLATE_NAME string = imageTemplateName
+

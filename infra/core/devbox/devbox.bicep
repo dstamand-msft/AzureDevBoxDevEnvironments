@@ -6,6 +6,7 @@ param projectName string
 param vNetName string
 param subnetName string = 'default'
 param environmentTypes array = ['QualityInsurance', 'Development']
+param rsToken string
 
 resource devCenter 'Microsoft.DevCenter/devcenters@2023-01-01-preview' = {
   name: name
@@ -25,7 +26,7 @@ resource devCenterEnvironment 'Microsoft.DevCenter/devcenters/environmentTypes@2
 
 resource attachednetworks 'Microsoft.DevCenter/devcenters/attachednetworks@2023-01-01-preview'= {
   parent: devCenter
-  name: '${devCenter.name}-NetConnection'
+  name: '${devCenter.name}-NetConnection-${rsToken}'
   properties: {
     networkConnectionId: devCenterNetworkConnection.id
   }
@@ -58,7 +59,7 @@ resource projectXEnvironmentType 'Microsoft.DevCenter/projects/environmentTypes@
 }]
 
 resource devCenterNetworkConnection 'Microsoft.DevCenter/networkConnections@2023-01-01-preview' = {
-  name: '${devCenter.name}-NetConnection'
+  name: '${devCenter.name}-NetConnection-${rsToken}'
   location: location
   properties: {
     domainJoinType: 'AzureADJoin'

@@ -1,8 +1,8 @@
 @description('Required. Name prefix of the Image Template to be built by the Azure Image Builder service.')
-param name string
+param imageTemplateName string
 
 @description('Required. Name of the User Assigned Identity to be used to deploy Image Templates in Azure Image Builder.')
-param userMsiName string
+param userImageBuilderName string
 
 @description('Optional. Resource group of the user assigned identity.')
 param userMsiResourceGroup string = resourceGroup().name
@@ -13,13 +13,14 @@ param location string = resourceGroup().location
 @description('Optional. Image build timeout in minutes. Allowed values: 0-960. 0 means the default 240 minutes.')
 @minValue(0)
 @maxValue(960)
-param buildTimeoutInMinutes int = 0
+param buildTimeoutInMinutes int = 100
 
 @description('Optional. Specifies the size for the VM.')
-param vmSize string = 'Standard_D2s_v3'
+@allowed([ 'Standard_B8as_v2', 'Standard_B32as_v2', 'Standard_B16as_v2' ])
+param vmSize string = 'Standard_B8as_v2'
 
 @description('Optional. Specifies the size of OS disk.')
-param osDiskSizeGB int = 128
+param osDiskSizeGB int = 127
 
 @description('''
 Optional. Resource ID of an already existing subnet, e.g.: /subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.Network/virtualNetworks/<vnetName>/subnets/<subnetName>.
@@ -59,7 +60,10 @@ param imageReplicationRegions array = []
 param storageAccountType string = 'Standard_LRS'
 
 @description('Optional. Tags of the resource.')
-param tags object = {}
+param tags object = {
+  imagebuilderTemplate: 'win11multi'
+  userIdentity: 'enabled'
+}
 
 @description('Generated. Do not provide a value! This date value is used to generate a unique image template name.')
 param baseTime string = utcNow('yyyy-MM-dd-HH-mm-ss')
@@ -83,7 +87,8 @@ var sharedImage = {
   storageAccountType: storageAccountType
   runOutputName: !empty(sigImageDefinitionId) ? '${last(split(sigImageDefinitionId, '/'))}-SharedImage' : 'SharedImage'
   artifactTags: {
-    sourceType: imageSource.type
+    sourceType: 'azureVmImageBuilder'
+    baseosimage: contains(imageSource, 'baseOs') ? imageSource.baseOs : null
     sourcePublisher: contains(imageSource, 'publisher') ? imageSource.publisher : null
     sourceOffer: contains(imageSource, 'offer') ? imageSource.offer : null
     sourceSku: contains(imageSource, 'sku') ? imageSource.sku : null
@@ -98,18 +103,18 @@ var vnetConfig = {
   subnetId: subnetId
 }
 
-resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
-  name: userMsiName
+resource ImageBuilderIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
+  name: userImageBuilderName
 }
 
 resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-02-14' = {
-  name: '${name}-${baseTime}'
+  name: imageTemplateName
   location: location
   tags: tags
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
-      '${userAssignedIdentity.id}': {}
+      '${ImageBuilderIdentity.id}': {}
     }
   }
   properties: {
@@ -118,11 +123,14 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-02-14
       vmSize: vmSize
       osDiskSizeGB: osDiskSizeGB
       userAssignedIdentities: userAssignedIdentities
-      vnetConfig: !empty(subnetId) ? vnetConfig : null
+      vnetConfig: !empty(subnetId) ? vnetConfig : null      
     }
     source: imageSource
     customize: customizationSteps
     distribute: [ sharedImage ]
-    stagingResourceGroup: stagingResourceGroup
+    stagingResourceGroup: stagingResourceGroup    
   }
 }
+
+output imageTemplateId string = imageTemplate.id
+output imageteplateName string = imageTemplate.name
