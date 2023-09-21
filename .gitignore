@@ -1,0 +1,4 @@
+# Outputs for infrastructure provisioning are automatically stored as environment variables in an .env file, located under .azure/<environment name>/.env.
+# This setup allows for a local application, or deployment scripts, to use variables stored in the .env file to reference Azure-hosted resources if needed
+# exclude this folder from source control, as it contains sensitive information
+.azure

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "resourceGroupName": {
+      "value": "${AZURE_RESOURCE_GROUP}"
+    },
+    "location": {
+      "value": "${AZURE_LOCATION}"
+    },
+    "keyVaultPatSecretValue": {
+      "value": "${keyVaultPatSecretValue}"
+    },
+    "devBoxName": {
+      "value": "${AZURE_DEVBOX_NAME=devbox-demo}"
+    },
+    "projectName": {
+      "value": "${AZURE_DEVBOX_PROJECT_NAME=demo-project}"
+    },
+    "virtualNetworkName": {
+      "value": "${AZURE_DEVBOX_VNET_NAME=devbox-vnet}"
+    },
+    "deployVnet": {
+      "value": true
+    },
+    "deployCustomImage": {
+      "value": true
+    },
+    "devboxRbac": {
+      "value": {
+        "principalId": "${AZURE_DEVBOX_PROJECT_ADMIN_PRINCIPALID}",
+        "roleType": "${AZURE_DEVBOX_PROJECT_ADMIN_ROLETYPE}"
+      }
+    },
+    "catalog": {
+      "value": {
+        "name": "SampleCatalog",
+        "repositoryType": "gitHub",
+        "uri": "https://github.com/${GITHUB_ORG_NAME}/AzureDevBoxDevEnvironments.git",
+        "branch": "main",
+        "path": "/environments"
+      }
+    },
+    "gitHubOrgName": {
+      "value": "${GITHUB_ORG_NAME}"
+    },
+    "imageGaleryName": {
+      "value": "${AZURE_GALLERY_NAME=DevboxGallery}"
+    },
+    "imageTemplateName": {
+      "value": "${AZURE_IMAGE_TEMPLATE_NAME=CustomTemplateDevImg}"
+    },
+    "imageDefinitionName": {
+      "value": "${AZURE_GALLERY_IMAGE_DEF=customVMImageDef}"
+    },
+    "imageDefinitionProperties": {
+      "value": {
+        "publisher": "MyCompany",
+        "offer": "MyCustomDevImage",
+        "sku": "windows-11",
+        "version": "3.0.0",
+        "osType": "Windows",
+        "hyperVGeneration": "V2"
+      }
+    },
+    "imageBuilderIdentity": {
+      "value": "${AZURE_IMAGE_BUILDER_IDENTITY}"
+    }
+  }
+}
+
+
