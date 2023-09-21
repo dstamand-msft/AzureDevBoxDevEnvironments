@@ -11,7 +11,7 @@ resource devCenterSubscriptionOwner 'Microsoft.Authorization/roleAssignments@202
   name: guid(principalId, 'DevCenterOwner', devCenterOwnerRole)
   properties: {
     roleDefinitionId: devCenterOwnerRole
-    principalType: 'User' // Group or User
+    principalType: 'ServicePrincipal'
     principalId: principalId
   }
 }

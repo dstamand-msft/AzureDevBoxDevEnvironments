@@ -24,15 +24,15 @@
       "value": "${AZURE_DEVBOX_VNET_NAME=devbox-vnet}"
     },
     "deployVnet": {
-      "value": false
+      "value": true
     },
     "deployCustomImage": {
-      "value": false
+      "value": true
     },
     "devboxRbac": {
       "value": {
-        "principalId": "e89b51f1-a6d5-4a6e-82a8-ab36c6137df3",
-        "roleType": "Group"
+        "principalId": "${AZURE_DEVBOX_PROJECT_ADMIN_PRINCIPALID}",
+        "roleType": "${AZURE_DEVBOX_PROJECT_ADMIN_ROLETYPE}"
       }
     },
     "catalog": {
@@ -43,6 +43,9 @@
         "branch": "main",
         "path": "/environments"
       }
+    },
+    "gitHubOrgName": {
+      "value": "${GITHUB_ORG_NAME}"
     },
     "imageGaleryName": {
       "value": "${AZURE_GALLERY_NAME=DevboxGallery}"

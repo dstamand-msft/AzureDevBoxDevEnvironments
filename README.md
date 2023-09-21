@@ -46,9 +46,18 @@ azd env set AZURE_LOCATION "LOCATION"
 azd env set AZURE_RESOURCE_GROUP "YOUR RESOURCE GROUP NAME"
 azd env set AZURE_SUBSCRIPTION_ID "************************************"
 azd env set GITHUB_ORG_NAME "YOUR_GITHUB_ORG_NAME"
+# ObjectId of the User or Group that will be DevCenter Project Admin in the project
+azd env set AZURE_DEVBOX_PROJECT_ADMIN_PRINCIPALID "YOUR_GITHUB_ORG_NAME"
+# User or Group
+azd env set AZURE_DEVBOX_PROJECT_ADMIN_ROLETYPE "YOUR_GITHUB_ORG_NAME" 
 azd env set keyVaultPatSecretValue "***********************************"
 # only if you want to deploy a custom image
 azd env set AZURE_IMAGE_BUILDER_IDENTITY "IMAGE BUILDER IDENTITY NAME"
+azd env set AZURE_IMAGE_TEMPLATE_NAME "devbox-ibt-1"
+# Allowed characters are English alphanumeric characters, with underscores and periods allowed in the middle, up to 80 characters total.
+# All other special characters, including dashes, are disallowed.
+azd env set AZURE_GALLERY_NAME "galdevboxdemo"
+azd env set AZURE_GALLERY_IMAGE_DEF "myDevBoxCustomImage"
 ```
 
 Azure Developer CLI uses an environment name to set the `AZURE_ENV_NAME` environment variable that's used by Azure Developer CLI templates. `AZURE_ENV_NAME` is also used to prefix the Azure resource group name. Because each environment has its own set of configurations, Azure Developer CLI stores all configuration files in environment directories.

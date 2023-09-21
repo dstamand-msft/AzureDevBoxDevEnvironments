@@ -1,4 +1,5 @@
 param location string = resourceGroup().location
+param gitHubOrgName string
 param imageGalleryName string = ''
 param imageTemplateName string = ''
 param imageDefinitionName string
@@ -55,7 +56,7 @@ module CustomImageDef '../virtual-machine-images/virtualmachineimages.bicep' = {
       {
         type: 'PowerShell'
         name: 'customscript'
-        scriptUri: 'https://raw.githubusercontent.com/dstamand-msft/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/installDevToolsImage.ps1'
+        scriptUri: 'https://raw.githubusercontent.com/${gitHubOrgName}/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/installDevToolsImage.ps1'
         runElevated: true
         runAsSystem: true
       }
@@ -65,7 +66,7 @@ module CustomImageDef '../virtual-machine-images/virtualmachineimages.bicep' = {
       {
         type: 'PowerShell'
         name: 'customscript'
-        scriptUri: 'https://raw.githubusercontent.com/dstamand-msft/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/Run-app.ps1'
+        scriptUri: 'https://raw.githubusercontent.com/${gitHubOrgName}/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/Run-app.ps1'
         runElevated: true
         runAsSystem: true
       }

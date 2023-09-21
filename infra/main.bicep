@@ -52,6 +52,8 @@ param imageBuilderIdentity string = ''
 @description('Deploy custom image gallery')
 param deployCustomImage bool
 
+@description('GitHub organization name that hosts the Azure Deployment Environment code')
+param gitHubOrgName string
 
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
@@ -180,6 +182,7 @@ module devboxCustomGallery 'core/devbox/devbox-image-gallery.bicep' = if(deployC
     location: location        
     imageDefinitionProperties:imageDefinitionProperties            
     userdIdentity: imageBuilderIdentity
+    gitHubOrgName: gitHubOrgName
   }
 }
 

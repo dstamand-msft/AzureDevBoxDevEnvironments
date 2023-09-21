@@ -1,7 +1,7 @@
 Write-Host "`r`nChecking if we can deploy custom image with devbox center!`r`n" -ForegroundColor Cyan
 
 $parametersFile = "$(Get-Location)/infra/main.parameters.json"
-if (!Test-Path $parametersFile) {
+if (!(Test-Path $parametersFile)) {
     Write-Host "Parameters file not found, exiting..." -ForegroundColor Gray
     exit 0
 }
@@ -44,7 +44,7 @@ foreach ($line in $output) {
     [Environment]::SetEnvironmentVariable($name, $value)
 }
 
-Write-Host "`r`nEnvironment variables set.`r`n"  -ForegroundColor Cyan
+Write-Host "Environment variables set.`r`n"  -ForegroundColor Cyan
 
 # Destination image resource group  
 $resourceGroupName = "$env:AZURE_RESOURCE_GROUP"

@@ -8,8 +8,6 @@ param subnetName string = 'default'
 param environmentTypes array = ['QualityInsurance', 'Development']
 param rsToken string
 
-var devCenterOwnerRole = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '8e3af657-a8ff-443c-a75c-2fe8c4bcb635')
-
 resource devCenter 'Microsoft.DevCenter/devcenters@2023-01-01-preview' = {
   name: name
   location: location
