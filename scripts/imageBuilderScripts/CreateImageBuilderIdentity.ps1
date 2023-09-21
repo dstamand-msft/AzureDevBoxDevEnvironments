@@ -1,6 +1,8 @@
-Write-Host ""
-Write-Host "Installing required Az modules..." -ForegroundColor Cyan
-Write-Host ""
+<#
+Image builder requires a user assigned identity to be created in the subscription that has a specific set of permissions.
+#>
+Write-Host "`r`nInstalling required Az modules...`r`n" -ForegroundColor Cyan
+
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
 'Az.Resources', 'Az.ImageBuilder', 'Az.Compute' | ForEach-Object { 
     if (Get-Module -ListAvailable -Name $_) {
@@ -17,9 +19,7 @@ Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
     }    
 }
 
-Write-Host ""
-Write-Host "Loading azd .env file from current environment"
-Write-Host ""
+Write-Host "`r`nLoading azd .env file from current environment`r`n" -ForegroundColor Cyan
 
 $output = azd env get-values
 foreach ($line in $output) {
@@ -31,9 +31,8 @@ foreach ($line in $output) {
     $value = $value -replace '^\"|\"$'
     [Environment]::SetEnvironmentVariable($name, $value)
 }
-Write-Host ""
-Write-Host "Environment variables set."
-Write-Host ""
+
+Write-Host "`r`nEnvironment variables set.`r`n" -ForegroundColor Cyan
  
 # Get your current subscription ID  
 $subscriptionID = "$env:AZURE_SUBSCRIPTION_ID"
@@ -60,9 +59,7 @@ if ($null -eq $resourceGroup) {
 }
 
 #Check if the identity already exists
-Write-Host ""
-Write-Host "Check if the identity already exists..."
-Write-Host ""
+Write-Host "`r`nCheck if the identity already exists...`r`n"
 
 $identity = Get-AzUserAssignedIdentity -SubscriptionId $subscriptionID -ResourceGroupName $resourceGroupName -Name $identityName -ErrorAction SilentlyContinue
 $identityNamePrincipalId = $null
@@ -86,16 +83,17 @@ if ($null -ne $roleDef) {
 else {    
     # Create a role definition file 
     $aibRoleImageCreationUrl = "https://raw.githubusercontent.com/azure/azvmimagebuilder/master/solutions/12_Creating_AIB_Security_Roles/aibRoleImageCreation.json" 
-    $aibRoleImageCreationPath = "aibRoleImageCreation.json" 
+    $tmpPath = [System.IO.Path]::GetTempPath()
+    $aibRoleImageCreationPath = Join-Path -Path $tmpPath -ChildPath "aibRoleImageCreation$(Get-Date -Format "yyyyMMddHHmm").json" 
 
     # Download the configuration 
     Invoke-WebRequest -Uri $aibRoleImageCreationUrl -OutFile $aibRoleImageCreationPath -UseBasicParsing 
-        ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<subscriptionID>', $subscriptionID) | Set-Content -Path $aibRoleImageCreationPath 
-        ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<rgName>', $resourceGroupName) | Set-Content -Path $aibRoleImageCreationPath 
-        ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace 'Azure Image Builder Service Image Creation Role', $imageRoleDefName) | Set-Content -Path $aibRoleImageCreationPath 
+    ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<subscriptionID>', $subscriptionID) | Set-Content -Path $aibRoleImageCreationPath 
+    ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace '<rgName>', $resourceGroupName) | Set-Content -Path $aibRoleImageCreationPath 
+    ((Get-Content -path $aibRoleImageCreationPath -Raw) -replace 'Azure Image Builder Service Image Creation Role', $imageRoleDefName) | Set-Content -Path $aibRoleImageCreationPath 
 
     # Create a role definition 
-    New-AzRoleDefinition -InputFile  ./aibRoleImageCreation.json     
+    New-AzRoleDefinition -InputFile $aibRoleImageCreationPath
 }
 
 # Check if role assignment already exists

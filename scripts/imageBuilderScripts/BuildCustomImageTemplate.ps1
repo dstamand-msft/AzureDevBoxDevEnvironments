@@ -1,18 +1,19 @@
-Write-Host ""
-Write-Host "Checking if we deploy custom image with devbox center!" -ForegroundColor Cyan
-Write-Host ""
+Write-Host "`r`nChecking if we deploy custom image with devbox center!`r`n" -ForegroundColor Cyan
 
-$cwd = (Get-Location)
-$infraParamsJson = Get-Content  "$cwd/infra/main.parameters.json" -Raw | ConvertFrom-Json 
+$parametersFile = "$(Get-Location)/infra/main.parameters.json"
+if (!Test-Path $parametersFile) {
+    Write-Host "Parameters file not found, exiting..." -ForegroundColor Gray
+    exit 0
+}
+
+$infraParamsJson = Get-Content $parametersFile -Raw | ConvertFrom-Json 
 $deployCustomImage = $infraParamsJson.parameters.deployCustomImage.value
 if ($false -eq $deployCustomImage) {
     Write-Host "Not deploying custom image, exiting..." -ForegroundColor Green
     exit 0
 }
 
-Write-Host ""
-Write-Host "Installing required Az modules..." -ForegroundColor Cyan
-Write-Host ""
+Write-Host "`r`nInstalling required Az modules...`r`n" -ForegroundColor Cyan
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
 'Az.Resources', 'Az.ImageBuilder', 'Az.Compute' | ForEach-Object { 
     if (Get-Module -ListAvailable -Name $_) {
@@ -29,9 +30,7 @@ Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
     }    
 }
 
-Write-Host ""
-Write-Host "Loading azd .env file from current environment"
-Write-Host ""
+Write-Host "`r`nLoading azd .env file from current environment`r`n" -ForegroundColor Cyan
 
 $output = azd env get-values
 foreach ($line in $output) {
@@ -43,9 +42,8 @@ foreach ($line in $output) {
     $value = $value -replace '^\"|\"$'
     [Environment]::SetEnvironmentVariable($name, $value)
 }
-Write-Host ""
-Write-Host "Environment variables set."
-Write-Host ""
+
+Write-Host "`r`nEnvironment variables set.`r`n" -ForegroundColor Cyan
 
 # Destination image resource group  
 $resourceGroupName = "$env:AZURE_RESOURCE_GROUP"
@@ -56,21 +54,20 @@ $imageTemplateName = "$env:AZURE_GALLERY_TEMPLATE_NAME"
 
 
 # check if resource resourceGroupName group is set or empty before continuing
-if ($null -eq $resourceGroupName || $resourceGroupName -eq "") {
+if ([string]::IsNullOrWhiteSpace($resourceGroupName)) {
     Write-Host "ResourceGroup group not set, exiting..." -ForegroundColor Gray
     exit 0
 }
 
 # check if Gallery Name and Image template name is set or empty before continuing
-if ($null -eq $galleryName || $galleryName -eq "" -or $null -eq $imageTemplateName || $imageTemplateName -eq "") {
+if ([string]::IsNullOrWhiteSpace($galleryName) || [string]::IsNullOrWhiteSpace($imageTemplateName)) {
     Write-Host "Gallery Name or Image template name not set in current environement, exiting..."  -ForegroundColor Gray
     exit 0
 }
 
 # Run the image template
-Write-Host "Running image template..." 
+Write-Host "`r`nRunning image template...`r`n" -ForegroundColor Cyan
 Invoke-AzResourceAction -ResourceGroupName $resourceGroupName -ResourceName $imageTemplateName -ResourceType Microsoft.VirtualMachineImages/imageTemplates -ApiVersion "2020-02-14"  -Action Run -Force -ErrorAction SilentlyContinue
-
 
 $title = 'Monitor the image template Build'
 $msg = 'Do you want to continue monitoring image template build ?'

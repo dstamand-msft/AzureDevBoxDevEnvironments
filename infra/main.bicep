@@ -103,6 +103,14 @@ module devBox 'core/devbox/devbox.bicep' = {
   }
 }
 
+
+module devBoxAccess 'core/devbox/devbox-access.bicep' = {
+  name: 'devBoxAccess'
+  params: {
+    principalId: devBox.outputs.identityPrincipalId
+  }
+}
+
 // Give the DevCenter access to KeyVault
 module keyVaultAccess './core/security/keyvault-access.bicep' = if (empty(keyVaultPatSecretUri)) {
   name: 'devcenter-keyvault-access'
@@ -137,8 +145,8 @@ module devBoxPools 'core/devbox/devbox-pools.bicep' = {
   }
 }
 
-module devBoxAccess 'core/devbox/devbox-access.bicep' = {
-  name: 'devBoxAccess'
+module devBoxProjectAccess 'core/devbox/devbox-project-access.bicep' = {
+  name: 'devBoxProjectAccess'
   scope: rg
   params: {
     principalId: devboxRbac.principalId

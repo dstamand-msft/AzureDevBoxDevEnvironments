@@ -1,18 +1,19 @@
-Write-Host ""
-Write-Host "Checking if we deploy custom image with devbox center!" -ForegroundColor Cyan
-Write-Host ""
+Write-Host "`r`nChecking if we can deploy custom image with devbox center!`r`n" -ForegroundColor Cyan
 
-$cwd = (Get-Location)
-$infraParamsJson = Get-Content  "$cwd/infra/main.parameters.json" -Raw | ConvertFrom-Json 
-$deployCustomImage = $infraParamsJson.parameters.deployCustomImage.value
-if ($false -eq $deployCustomImage) {
-    Write-Host "Not deploying custom image, exiting..." -ForegroundColor Green
+$parametersFile = "$(Get-Location)/infra/main.parameters.json"
+if (!Test-Path $parametersFile) {
+    Write-Host "Parameters file not found, exiting..." -ForegroundColor Gray
     exit 0
 }
 
-Write-Host ""
-Write-Host "Installing required Az modules..." -ForegroundColor Cyan
-Write-Host ""
+$infraParamsJson = Get-Content $parametersFile -Raw | ConvertFrom-Json
+$deployCustomImage = $infraParamsJson.parameters.deployCustomImage.value
+if ($false -eq $deployCustomImage) {
+    Write-Host "Option to deploy custom image was set to false. Not deploying custom image, exiting..." -ForegroundColor Green
+    exit 0
+}
+
+Write-Host "`r`nInstalling required Az modules...`r`n" -ForegroundColor Cyan
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
 'Az.Resources', 'Az.ImageBuilder', 'Az.Compute' | ForEach-Object { 
     if (Get-Module -ListAvailable -Name $_) {
@@ -29,9 +30,8 @@ Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
     }    
 }
 
-Write-Host ""
-Write-Host "Loading azd .env file from current environment"
-Write-Host ""
+
+Write-Host "`r`nLoading azd .env file from current environment`r`n" -ForegroundColor Cyan
 
 $output = azd env get-values
 foreach ($line in $output) {
@@ -43,14 +43,11 @@ foreach ($line in $output) {
     $value = $value -replace '^\"|\"$'
     [Environment]::SetEnvironmentVariable($name, $value)
 }
-Write-Host ""
-Write-Host "Environment variables set."
-Write-Host ""
 
-
+Write-Host "`r`nEnvironment variables set.`r`n"  -ForegroundColor Cyan
 
 # Destination image resource group  
-$ressourceGroupName = "$env:AZURE_RESOURCE_GROUP"
+$resourceGroupName = "$env:AZURE_RESOURCE_GROUP"
 # Image template name  
 $imageTemplateName = "$env:AZURE_IMAGE_TEMPLATE_NAME"
 # Gallery name 
@@ -59,32 +56,30 @@ $galleryName = "$env:AZURE_GALLERY_NAME"
 $imageDefName = "$env:AZURE_GALLERY_IMAGE_DEF" 
 
 # check if resource ressourceGroupName group is set or empty before continuing
-if ($null -eq $ressourceGroupName || $ressourceGroupName -eq "") {
+if ([string]::IsNullOrWhiteSpace($resourceGroupName)) {
     Write-Host "ResourceGroup group not set, exiting..." -ForegroundColor Gray
     exit 0
 }
 
 # check if Gallery Name and Image template name is set or empty before continuing
-if ($null -eq $galleryName || $galleryName -eq "" -or $null -eq $imageTemplateName || $imageTemplateName -eq "") {
+if ([string]::IsNullOrWhiteSpace($galleryName) || [string]::IsNullOrWhiteSpace($imageTemplateName)) {
     Write-Host "Gallery Name or Image template name not set in current environement, exiting..."  -ForegroundColor Gray
     exit 0
 }
 
-Write-Host ""
-Write-Host "Deleting image template..."  
+Write-Host "`r`nDeleting image template...`r`n" -ForegroundColor Cyan
 # Delete the image template
 # check if image template already exists
-$imageTemplate = Get-AzImageBuilderTemplate -ResourceGroupName $ressourceGroupName -Name $imageTemplateName -ErrorAction SilentlyContinue
+$imageTemplate = Get-AzImageBuilderTemplate -ResourceGroupName $resourceGroupName -Name $imageTemplateName -ErrorAction SilentlyContinue
 if ($null -eq $imageTemplate) {
-    write-host "Image template does not exist, skipping deletion" -ForegroundColor Yellow
+    Write-Host "Image template does not exist, skipping deletion" -ForegroundColor Yellow
 }
 else {
-    Remove-AzImageBuilderTemplate -ResourceGroupName $ressourceGroupName -Name $imageTemplateName
+    Remove-AzImageBuilderTemplate -ResourceGroupName $resourceGroupName -Name $imageTemplateName
 }
 
-Write-Host ""
-Write-Host "Deleting image Gallery definition ..."
-$gallery = Get-AzGallery -ResourceGroupName $ressourceGroupName -Name $galleryName -ErrorAction SilentlyContinue
+Write-Host "`r`nDeleting image Gallery definition ...`r`n" -ForegroundColor Cyan
+$gallery = Get-AzGallery -ResourceGroupName $resourceGroupName -Name $galleryName -ErrorAction SilentlyContinue
 if ($null -eq $gallery) {
     Write-Host "Gallery does not exist, skipping deletion" -ForegroundColor Yellow
     exit 0
@@ -92,12 +87,12 @@ if ($null -eq $gallery) {
 
 # delete the image definition
 # check if image definition already exists
-$imageDef = Get-AzGalleryImageDefinition -ResourceGroupName $ressourceGroupName -GalleryName $galleryName -GalleryImageDefinitionName $imageDefName -ErrorAction SilentlyContinue
+$imageDef = Get-AzGalleryImageDefinition -ResourceGroupName $resourceGroupName -GalleryName $galleryName -GalleryImageDefinitionName $imageDefName -ErrorAction SilentlyContinue
 if ($null -eq $imageDef) {
     Write-Host "Image definition does not exist, skipping deletion" -ForegroundColor Yellow
     exit 0
 }
-Remove-AzGalleryImageDefinition -ResourceGroupName $ressourceGroupName -GalleryName $galleryName -GalleryImageDefinitionName $imageDefName -ErrorAction SilentlyContinue
+Remove-AzGalleryImageDefinition -ResourceGroupName $resourceGroupName -GalleryName $galleryName -GalleryImageDefinitionName $imageDefName -ErrorAction SilentlyContinue
 
 Write-Host "${imageDefName}: Image template deleting complete." -ForegroundColor Green
 
