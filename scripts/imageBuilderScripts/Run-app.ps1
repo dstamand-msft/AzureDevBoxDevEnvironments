@@ -10,6 +10,3 @@ docker compose up
    
 Write-Host "Application running..."
 Start-Process "http://localhost:5000/"
-# exit script
-exit 0
-

@@ -48,7 +48,7 @@ module CustomImageDef '../virtual-machine-images/virtualmachineimages.bicep' = {
     location: location
     userImageBuilderName: userImgBuilderIdentity.name
     // see the type of object (for the definition), here
-    // https://learn.microsoft.com/en-us/azure/templates/microsoft.virtualmachineimages/imagetemplates?pivots=deployment-language-bicep#imagetemplatecustomizer    
+    // https://learn.microsoft.com/en-us/azure/templates/microsoft.virtualmachineimages/imagetemplates?pivots=deployment-language-bicep#imagetemplatecustomizer
     imageSource: imageSource
     sigImageDefinitionId: imageGalleryDefinition.outputs.id
     sigImageVersion: imageDefinitionProperties.version
