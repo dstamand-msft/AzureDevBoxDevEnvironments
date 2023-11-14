@@ -55,6 +55,9 @@ param deployCustomImage bool
 @description('GitHub organization name that hosts the Azure Deployment Environment code')
 param gitHubOrgName string
 
+@description('The tags to apply to all resources')
+param tags object = {}
+
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var keyVaultPatSecretName = 'REPO-PAT'
@@ -102,6 +105,7 @@ module devBox 'core/devbox/devbox.bicep' = {
     projectName: !empty(projectName) ? projectName : '${abbrs.devbox}-project'
     vNetName: vNet.outputs.vNetName
     rsToken: resourceToken
+    tags: tags
   }
 }
 

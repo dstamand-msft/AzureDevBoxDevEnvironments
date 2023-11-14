@@ -66,6 +66,7 @@ resource devCenterNetworkConnection 'Microsoft.DevCenter/networkConnections@2023
     subnetId: subnet.id
     networkingResourceGroupName: 'NI_${devCenter.name}-NetConnection_${toLower(location)}'
   }
+  tags: tags
 }
 
 resource vNet 'Microsoft.Network/virtualNetworks@2022-11-01' existing = {
