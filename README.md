@@ -47,9 +47,9 @@ azd env set AZURE_RESOURCE_GROUP "YOUR RESOURCE GROUP NAME"
 azd env set AZURE_SUBSCRIPTION_ID "************************************"
 azd env set GITHUB_ORG_NAME "YOUR_GITHUB_ORG_NAME"
 # ObjectId of the User or Group that will be DevCenter Project Admin in the project
-azd env set AZURE_DEVBOX_PROJECT_ADMIN_PRINCIPALID "YOUR_GITHUB_ORG_NAME"
+azd env set AZURE_DEVBOX_PROJECT_ADMIN_PRINCIPALID ""
 # User or Group
-azd env set AZURE_DEVBOX_PROJECT_ADMIN_ROLETYPE "YOUR_GITHUB_ORG_NAME" 
+azd env set AZURE_DEVBOX_PROJECT_ADMIN_ROLETYPE "" 
 azd env set keyVaultPatSecretValue "***********************************"
 # only if you want to deploy a custom image
 azd env set AZURE_IMAGE_BUILDER_IDENTITY "IMAGE BUILDER IDENTITY NAME"
