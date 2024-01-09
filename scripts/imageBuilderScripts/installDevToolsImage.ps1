@@ -26,18 +26,10 @@ Write-Host "Install Git..."
 choco install git -y
 
 Write-Host "All Packages Installed"
-try {
-    # Clone Application from azure    
-    Write-Host "Install wsl to run docker linux container"
+# Clone Application from azure    
+Write-Host "Install wsl feature to run docker linux container"
 
-    # Enable the Windows Subsystem for Linux optional feature    
-    dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-    # Enable the Virtual Machine Platform optional feature 
-    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
-
-    # Install. --install installs Ubuntu and use WSL 2 by default
-    wsl --install
-}
-catch {
-    exit 0
-}
+# Enable the Windows Subsystem for Linux optional feature    
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+# Enable the Virtual Machine Platform optional feature 
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
