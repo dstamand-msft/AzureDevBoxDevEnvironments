@@ -35,11 +35,8 @@ try {
     # Enable the Virtual Machine Platform optional feature 
     dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 
-    wsl.exe --update
-    # Download and install the Linux kernel update package
-    wsl --set-default-version 2
-    # Download the Linux kernel update package
-    wsl --install -d ubuntu
+    # Install. --install installs Ubuntu and use WSL 2 by default
+    wsl --install
 }
 catch {
     exit 0
