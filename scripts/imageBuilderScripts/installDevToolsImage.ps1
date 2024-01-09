@@ -25,15 +25,22 @@ Write-Host "Azure Developers tools installed"
 Write-Host "Install Git..."
 choco install git -y
 
-Write-Host "Refresh Environment Variable - Path"
-RefreshEnv.cmd
-
 Write-Host "All Packages Installed"
 try {
-    # Clone Application from azure
+    # Clone Application from azure    
     Write-Host "Install wsl to run docker linux container"
+
+    # Enable the Windows Subsystem for Linux optional feature    
+    dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+    # Enable the Virtual Machine Platform optional feature 
+    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+    wsl.exe --update
+    # Download and install the Linux kernel update package
+    wsl --set-default-version 2
+    # Download the Linux kernel update package
     wsl --install -d ubuntu
 }
 catch {
-    exit -1
+    exit 0
 }
