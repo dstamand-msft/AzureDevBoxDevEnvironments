@@ -13,7 +13,7 @@ choco install adobereader -y
 choco install kubernetes-cli -y
 choco install kubernetes-helm -y
 choco install terraform -y
-choco install docker-desktop -y
+# docker needs to be installed manually
 
 Write-Host "Install Azure Developers Tools..."
 choco install microsoftazurestorageexplorer -y

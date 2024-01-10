@@ -55,17 +55,26 @@ module CustomImageDef '../virtual-machine-images/virtualmachineimages.bicep' = {
     customizationSteps: [
       {
         type: 'PowerShell'
-        name: 'customscript'
-        scriptUri: 'https://raw.githubusercontent.com/${gitHubOrgName}/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/installDevToolsImage.ps1'
+        name: 'installdevtools'
+        scriptUri: 'https://strdomtest.blob.core.windows.net/vmbuilder/installDevToolsImage.ps1'
         runElevated: true
         runAsSystem: true
       }
       {
         type: 'WindowsRestart'
       }
+      // {
+      //   type: 'PowerShell'
+      //   name: 'installwsl'
+      //   inline: [
+      //     'wsl --install'
+      //   ]
+      //   runElevated: true
+      //   runAsSystem: true
+      // }      
       {
         type: 'PowerShell'
-        name: 'customscript'
+        name: 'installapp'
         scriptUri: 'https://raw.githubusercontent.com/${gitHubOrgName}/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/Run-app.ps1'
         runElevated: true
         runAsSystem: true

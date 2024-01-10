@@ -17,8 +17,8 @@ param deployVnet bool
 @description('The RBAC for the devbox')
 param devboxRbac object
 
-@description('The artifcats catalog to add')
-param catalog object
+@description('The artifacts catalog to add')
+param catalogs array
 
 param virtualNetworkName string = ''
 param keyVaultPatSecretUri string = ''
@@ -161,8 +161,8 @@ module devBoxProjectAccess 'core/devbox/devbox-project-access.bicep' = {
   }
 }
 
-module devBoxCatalog 'core/devbox/devbox-catalog.bicep' = {
-  name: 'devBoxCatalog'
+module devBoxCatalog 'core/devbox/devbox-catalog.bicep' = [for (catalog, index) in catalogs : {
+  name: 'devBoxCatalog${index}'
   scope: rg
   params: {
     devBoxName: devBox.outputs.name
@@ -173,7 +173,7 @@ module devBoxCatalog 'core/devbox/devbox-catalog.bicep' = {
     path: contains(catalog, 'path') ? catalog.path : ''
     patKeyVaultUri: empty(keyVaultPatSecretUri) ? keyVaultSecret.outputs.secretUri : keyVaultPatSecretUri
   }
-}
+}]
 
 // add Image gallery
 module devboxCustomGallery 'core/devbox/devbox-image-gallery.bicep' = if(deployCustomImage) {
