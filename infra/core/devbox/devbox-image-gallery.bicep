@@ -56,7 +56,7 @@ module CustomImageDef '../virtual-machine-images/virtualmachineimages.bicep' = {
       {
         type: 'PowerShell'
         name: 'installdevtools'
-        scriptUri: 'https://strdomtest.blob.core.windows.net/vmbuilder/installDevToolsImage.ps1'
+        scriptUri: 'https://raw.githubusercontent.com/${gitHubOrgName}/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/installDevToolsImage.ps1'
         runElevated: true
         runAsSystem: true
       }
