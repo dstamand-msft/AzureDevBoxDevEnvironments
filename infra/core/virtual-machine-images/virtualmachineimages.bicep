@@ -4,9 +4,6 @@ param imageTemplateName string
 @description('Required. Name of the User Assigned Identity to be used to deploy Image Templates in Azure Image Builder.')
 param userImageBuilderName string
 
-@description('Optional. Resource group of the user assigned identity.')
-param userMsiResourceGroup string = resourceGroup().name
-
 @description('Optional. Location for all resources.')
 param location string = resourceGroup().location
 

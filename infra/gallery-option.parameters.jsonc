@@ -1,0 +1,52 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        // "gitHubOrgName": {
+        //     "value": "dstamand-msft"
+        // },
+        "imageGalleryName": {
+            // Allowed characters are English alphanumeric characters, with underscores and periods allowed in the middle, up to 80 characters total.
+            // All other special characters, including dashes, are disallowed.
+            "value": "galdevbox"
+        },
+        "imageTemplateName": {
+            "value": "it-devboxdemo"
+        },
+        "imageDefinitionName": {
+            "value": "customVMImageDef"
+        },
+        "imageDefinitionProperties": {
+            "value": {
+                "publisher": "MyCompany",
+                "offer": "MyCustomDevImage",
+                "sku": "windows-11",
+                "version": "1.0.0",
+                "osType": "Windows",
+                "hyperVGeneration": "V2"
+            }
+        },
+        "customizationSteps": {
+            "value": [
+                {
+                    "type": "PowerShell",
+                    "name": "installDevTools",
+                    "scriptUri": "https://raw.githubusercontent.com/dstamand-msft/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/installDevToolsImage.ps1",
+                    "runElevated": true,
+                    "runAsSystem": true,
+                    "validExitCodes": [0, 3010]
+                  },
+                  {
+                    "type": "WindowsRestart"
+                  },
+                  {
+                    "type": "PowerShell",
+                    "name": "installapp",
+                    "scriptUri": "https://raw.githubusercontent.com/dstamand-msft/AzureDevBoxDevEnvironments/main/scripts/imageBuilderScripts/Run-app.ps1",
+                    "runElevated": true,
+                    "runAsSystem": true
+                  }
+            ]
+        }
+    }
+}

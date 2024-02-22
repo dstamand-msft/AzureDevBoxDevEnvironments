@@ -26,9 +26,6 @@
     "deployVnet": {
       "value": true
     },
-    "deployCustomImage": {
-      "value": true
-    },
     "devboxRbac": {
       "value": {
         "principalId": "${AZURE_DEVBOX_PROJECT_ADMIN_PRINCIPALID}",
@@ -36,38 +33,22 @@
       }
     },
     "catalog": {
-      "value": {
-        "name": "SampleCatalog",
-        "repositoryType": "gitHub",
-        "uri": "https://github.com/${GITHUB_ORG_NAME}/AzureDevBoxDevEnvironments.git",
-        "branch": "main",
-        "path": "/environments"
-      }
-    },
-    "gitHubOrgName": {
-      "value": "${GITHUB_ORG_NAME}"
-    },
-    "imageGaleryName": {
-      "value": "${AZURE_GALLERY_NAME=DevboxGallery}"
-    },
-    "imageTemplateName": {
-      "value": "${AZURE_IMAGE_TEMPLATE_NAME=CustomTemplateDevImg}"
-    },
-    "imageDefinitionName": {
-      "value": "${AZURE_GALLERY_IMAGE_DEF=customVMImageDef}"
-    },
-    "imageDefinitionProperties": {
-      "value": {
-        "publisher": "MyCompany",
-        "offer": "MyCustomDevImage",
-        "sku": "windows-11",
-        "version": "1.0.0",
-        "osType": "Windows",
-        "hyperVGeneration": "V2"
-      }
-    },
-    "imageBuilderIdentity": {
-      "value": "${AZURE_IMAGE_BUILDER_IDENTITY}"
+      "value": [
+        {
+          "name": "Environments",
+          "repositoryType": "gitHub",
+          "uri": "https://github.com/${GITHUB_ORG_NAME}/AzureDevBoxDevEnvironments.git",
+          "branch": "main",
+          "path": "/catalog/environments"
+        },
+        {
+          "name": "Tasks",
+          "repositoryType": "gitHub",
+          "uri": "https://github.com/${GITHUB_ORG_NAME}/AzureDevBoxDevEnvironments.git",
+          "branch": "main",
+          "path": "/catalog/tasks"
+        }
+      ]
     }
   }
 }

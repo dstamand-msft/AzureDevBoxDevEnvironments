@@ -51,13 +51,6 @@ azd env set AZURE_DEVBOX_PROJECT_ADMIN_PRINCIPALID ""
 # User or Group
 azd env set AZURE_DEVBOX_PROJECT_ADMIN_ROLETYPE "" 
 azd env set keyVaultPatSecretValue "***********************************"
-# only if you want to deploy a custom image
-azd env set AZURE_IMAGE_BUILDER_IDENTITY "IMAGE BUILDER IDENTITY NAME"
-azd env set AZURE_IMAGE_TEMPLATE_NAME "devbox-ibt-1"
-# Allowed characters are English alphanumeric characters, with underscores and periods allowed in the middle, up to 80 characters total.
-# All other special characters, including dashes, are disallowed.
-azd env set AZURE_GALLERY_NAME "galdevboxdemo"
-azd env set AZURE_GALLERY_IMAGE_DEF "myDevBoxCustomImage"
 ```
 
 Azure Developer CLI uses an environment name to set the `AZURE_ENV_NAME` environment variable that's used by Azure Developer CLI templates. `AZURE_ENV_NAME` is also used to prefix the Azure resource group name. Because each environment has its own set of configurations, Azure Developer CLI stores all configuration files in environment directories.
@@ -71,14 +64,12 @@ This environment variable is set when you run `azd init` or `azd env new`.
  },
 ```
 
-3. If you want to deploy custom Image Template with your DevCenter Change the property deployCustomImage to **true** otherwise keep it as **false**
+3. If you want to deploy custom Image Template to use with your DevCenter, use the `Deploy-GalleryOption.ps1` PowerShell script. An example of parameters can be found in the file `infra/gallery-option.parameters.jsonc`
 
-```JSON
- "deployCustomImage": {
-    "value": true
- },
+```PowerShell
+ .\Deploy-GalleryOption.ps1 -ResourceGroupName rg-devboxdemo -Location EastUS -UserIdentityName id-aibdevbox -TemplateFile path/to/gallery-option.bicep -TemplateParameterFile path/to/gallery-option.parameters.json
 ```
-
+Once the gallery and the sample image is deployed and built, you can associate the gallery into your Dev Center.
 
 3. Run `azd up` - This will provision Azure resources and deploy this sample to those resources.
 
@@ -125,3 +116,18 @@ New-AzDeployment -Name DevBox -Location EastUS2 -TemplateFile .\src\main.bicep -
 
 3. Open the YAML pipeline located under \.pipelines\devbox-deply.yml and modify the parameters.
 4. As indicated, ensure the Service connection has **'Microsoft.Authorization/roleAssignments/write'** permissions.
+
+# FAQs
+
+## My enterprise policy requires to tag my resources
+
+In the `main.parameters.json` file, add a parameter tags, such as:
+
+```JSON
+"tags": {
+  "value": {
+     "owner": "user@domain.tld",
+     "environment": "production"
+  }
+}
+```

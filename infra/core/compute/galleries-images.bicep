@@ -1,5 +1,5 @@
 @minLength(1)
-@sys.description('Required. Name of the Azure Compute Gallery.')
+@sys.description('Required. Name of the Azure Compute Gallery Image.')
 param name string
 
 @minLength(1)

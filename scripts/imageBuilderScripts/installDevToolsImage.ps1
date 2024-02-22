@@ -26,10 +26,18 @@ Write-Host "Install Git..."
 choco install git -y
 
 Write-Host "All Packages Installed"
-# Clone Application from azure    
+# Clone Application from azure
 Write-Host "Install wsl feature to run docker linux container"
 
-# Enable the Windows Subsystem for Linux optional feature    
+# Enable the Windows Subsystem for Linux optional feature
+# note that this command returns a Exit Code 3010, which is a success code for the installation of the feature but requires a reboot
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-# Enable the Virtual Machine Platform optional feature 
+# Enable the Virtual Machine Platform optional feature
+# note that this command returns a Exit Code 3010, which is a success code for the installation of the feature but requires a reboot
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+# Install wsl
+Write-Host "Install WSL"
+wsl.exe --install
+
+Write-Host "Helper: Exit Code: $LASTEXITCODE"
