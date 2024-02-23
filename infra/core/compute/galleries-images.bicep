@@ -36,7 +36,14 @@ resource galleryImage 'Microsoft.Compute/galleries/images@2022-03-03' = {
     description: description
     osState: 'Generalized'
     hyperVGeneration: 'V2'
-    features: [ {
+    // enable hybernation on the image
+    // see https://learn.microsoft.com/en-us/azure/dev-box/how-to-configure-dev-box-hibernation#enable-hibernation-on-your-dev-box-image
+    features: [
+      {
+        name: 'IsHibernateSupported'
+        value: 'true'
+      }      
+      {
         name: 'SecurityType'
         value: 'TrustedLaunch'
       }
