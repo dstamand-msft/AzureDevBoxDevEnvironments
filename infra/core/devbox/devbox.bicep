@@ -8,7 +8,7 @@ param subnetName string = 'default'
 param environmentTypes array = ['QualityInsurance', 'Development']
 param rsToken string
 
-resource devCenter 'Microsoft.DevCenter/devcenters@2023-01-01-preview' = {
+resource devCenter 'Microsoft.DevCenter/devcenters@2025-04-01-preview' = {
   name: name
   location: location
   tags: tags
@@ -18,7 +18,7 @@ resource devCenter 'Microsoft.DevCenter/devcenters@2023-01-01-preview' = {
   }
 }
 
-resource devCenterEnvironment 'Microsoft.DevCenter/devcenters/environmentTypes@2023-01-01-preview' = [for envType in environmentTypes : {
+resource devCenterEnvironment 'Microsoft.DevCenter/devcenters/environmentTypes@2025-04-01-preview' = [for envType in environmentTypes : {
   parent: devCenter
   name: envType
   properties: {}
@@ -32,15 +32,21 @@ resource attachednetworks 'Microsoft.DevCenter/devcenters/attachednetworks@2023-
   }
 }
 
-resource devCenterProject 'Microsoft.DevCenter/projects@2023-01-01-preview' = {
+resource devCenterProject 'Microsoft.DevCenter/projects@2025-04-01-preview' = {
   name: projectName
   location: location
   properties: {
     devCenterId: devCenter.id
+    catalogSettings: {
+      catalogItemSyncTypes: [
+        'EnvironmentDefinition'
+        'ImageDefinition'
+      ]
+    }
   }
 }
 
-resource projectXEnvironmentType 'Microsoft.DevCenter/projects/environmentTypes@2023-01-01-preview' = [for envType in environmentTypes : {
+resource projectXEnvironmentType 'Microsoft.DevCenter/projects/environmentTypes@2025-04-01-preview' = [for envType in environmentTypes : {
   parent: devCenterProject
   name: envType
   properties: {
@@ -58,7 +64,7 @@ resource projectXEnvironmentType 'Microsoft.DevCenter/projects/environmentTypes@
   }
 }]
 
-resource devCenterNetworkConnection 'Microsoft.DevCenter/networkConnections@2023-01-01-preview' = {
+resource devCenterNetworkConnection 'Microsoft.DevCenter/networkConnections@2025-04-01-preview' = {
   name: '${devCenter.name}-NetConnection-${rsToken}'
   location: location
   properties: {
@@ -69,11 +75,11 @@ resource devCenterNetworkConnection 'Microsoft.DevCenter/networkConnections@2023
   tags: tags
 }
 
-resource vNet 'Microsoft.Network/virtualNetworks@2022-11-01' existing = {
+resource vNet 'Microsoft.Network/virtualNetworks@2024-05-01' existing = {
   name: vNetName
 }
 
-resource subnet 'Microsoft.Network/virtualNetworks/subnets@2022-11-01' existing = {
+resource subnet 'Microsoft.Network/virtualNetworks/subnets@2024-05-01' existing = {
   name: subnetName
   parent: vNet
 }

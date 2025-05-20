@@ -6,7 +6,7 @@ param projectName string
 // see https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
 var devCenterProjectAdminRole = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '331c37c6-af14-46d9-b9f4-e1909e1b95a0')
 
-resource devBoxProject 'Microsoft.DevCenter/projects@2023-01-01-preview' existing = {
+resource devBoxProject 'Microsoft.DevCenter/projects@2025-04-01-preview' existing = {
   name: projectName
 }
 

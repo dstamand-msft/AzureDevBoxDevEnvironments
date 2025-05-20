@@ -21,22 +21,22 @@ var skuMap = {
 param defaultMachineStorage string = 'ssd_256gb'
 
 
-resource devCenter 'Microsoft.DevCenter/devcenters@2023-01-01-preview' existing = {
+resource devCenter 'Microsoft.DevCenter/devcenters@2025-04-01-preview' existing = {
   name: devBoxName
 }
 
-resource devBoxGallery 'Microsoft.DevCenter/devcenters/galleries@2023-01-01-preview' existing = {
+resource devBoxGallery 'Microsoft.DevCenter/devcenters/galleries@2025-04-01-preview' existing = {
   name: galleryName
   parent: devCenter
 }
 
-resource galleryimage 'Microsoft.DevCenter/devcenters/galleries/images@2022-11-11-preview' existing = {
+resource galleryimage 'Microsoft.DevCenter/devcenters/galleries/images@2025-04-01-preview' existing = {
   name: defaultImageMap['${image}']
   parent: devBoxGallery
 }
 output imageGalleryId string = galleryimage.id
 
-resource devboxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@2023-01-01-preview' = [for item in definitions: {
+resource devboxDefinitions 'Microsoft.DevCenter/devcenters/devboxdefinitions@2025-04-01-preview' = [for item in definitions: {
   parent: devCenter
   name: item.name
   location: location

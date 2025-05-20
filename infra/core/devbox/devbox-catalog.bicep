@@ -24,11 +24,11 @@ var properties = repositoryType == 'ado' ? {
   }
 }
 
-resource devCenter 'Microsoft.DevCenter/devcenters@2023-01-01-preview' existing = {
+resource devCenter 'Microsoft.DevCenter/devcenters@2025-04-01-preview' existing = {
   name: devBoxName
 }
 
-resource devCenterCatalog 'Microsoft.DevCenter/devcenters/catalogs@2023-01-01-preview' = {
+resource devCenterCatalog 'Microsoft.DevCenter/devcenters/catalogs@2025-04-01-preview' = {
   parent: devCenter
   name: catalogName
   properties: properties

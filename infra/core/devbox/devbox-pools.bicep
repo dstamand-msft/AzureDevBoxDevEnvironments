@@ -3,12 +3,13 @@ param location string = resourceGroup().location
 param devBoxProjectName string
 param devBoxNetworkConnectionName string
 param poolNames array
+param enableSSO bool = false
 
-resource devCenterProject 'Microsoft.DevCenter/projects@2023-01-01-preview' existing = {
+resource devCenterProject 'Microsoft.DevCenter/projects@2025-04-01-preview' existing = {
   name: devBoxProjectName
 }
 
-resource pools 'Microsoft.DevCenter/projects/pools@2023-01-01-preview' = [for item in poolNames: {
+resource pools 'Microsoft.DevCenter/projects/pools@2025-04-01-preview' = [for item in poolNames: {
   parent: devCenterProject
   name: item.name
   location: location
@@ -17,10 +18,17 @@ resource pools 'Microsoft.DevCenter/projects/pools@2023-01-01-preview' = [for it
     licenseType: 'Windows_Client'
     localAdministrator: item.enableLocalAdmin ? 'Enabled' : 'Disabled'
     networkConnectionName: devBoxNetworkConnectionName
+    singleSignOnStatus: enableSSO ? 'Enabled' : 'Disabled'
+    stopOnDisconnect: {
+      gracePeriodMinutes: 60
+    }
+    stopOnNoConnect: {
+      gracePeriodMinutes: 60
+    }
   }
 }]
 
-resource poolsSchedules 'Microsoft.DevCenter/projects/pools/schedules@2023-01-01-preview' = [for (item, i) in poolNames: if (!empty(item.schedule)) {
+resource poolsSchedules 'Microsoft.DevCenter/projects/pools/schedules@2025-04-01-preview' = [for (item, i) in poolNames: if (!empty(item.schedule)) {
   dependsOn: [
     pools[i]
   ]
