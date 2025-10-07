@@ -5,11 +5,11 @@ param devBoxNetworkConnectionName string
 param poolNames array
 param enableSSO bool = false
 
-resource devCenterProject 'Microsoft.DevCenter/projects@2025-04-01-preview' existing = {
+resource devCenterProject 'Microsoft.DevCenter/projects@2025-07-01-preview' existing = {
   name: devBoxProjectName
 }
 
-resource pools 'Microsoft.DevCenter/projects/pools@2025-04-01-preview' = [for item in poolNames: {
+resource pools 'Microsoft.DevCenter/projects/pools@2025-07-01-preview' = [for item in poolNames: {
   parent: devCenterProject
   name: item.name
   location: location
@@ -28,7 +28,7 @@ resource pools 'Microsoft.DevCenter/projects/pools@2025-04-01-preview' = [for it
   }
 }]
 
-resource poolsSchedules 'Microsoft.DevCenter/projects/pools/schedules@2025-04-01-preview' = [for (item, i) in poolNames: if (!empty(item.schedule)) {
+resource poolsSchedules 'Microsoft.DevCenter/projects/pools/schedules@2025-07-01-preview' = [for (item, i) in poolNames: if (!empty(item.schedule)) {
   dependsOn: [
     pools[i]
   ]

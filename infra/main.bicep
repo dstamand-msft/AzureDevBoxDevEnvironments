@@ -70,7 +70,7 @@ module keyVaultSecret 'core/security/keyvault-secret.bicep' = if (empty(keyVault
   scope: rg
   params: {
     name: keyVaultPatSecretName
-    keyVaultName: keyVault.outputs.name
+    keyVaultName: keyVault!.outputs.name
     secretValue: keyVaultPatSecretValue
   }
 }
@@ -101,7 +101,7 @@ module keyVaultAccess './core/security/keyvault-access.bicep' = if (empty(keyVau
   name: 'devcenter-keyvault-access'
   scope: rg
   params: {
-    keyVaultName: keyVault.outputs.name
+    keyVaultName: keyVault!.outputs.name
     principalId: devBox.outputs.identityPrincipalId
   }
 }
