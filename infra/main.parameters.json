@@ -32,7 +32,7 @@
         "roleType": "${AZURE_DEVBOX_PROJECT_ADMIN_ROLETYPE}"
       }
     },
-    "catalog": {
+    "catalogs": {
       "value": [
         {
           "name": "Environments",

@@ -85,13 +85,13 @@ var sharedImage = {
   runOutputName: !empty(sigImageDefinitionId) ? '${last(split(sigImageDefinitionId, '/'))}-SharedImage' : 'SharedImage'
   artifactTags: {
     sourceType: 'azureVmImageBuilder'
-    baseosimage: contains(imageSource, 'baseOs') ? imageSource.baseOs : null
-    sourcePublisher: contains(imageSource, 'publisher') ? imageSource.publisher : null
-    sourceOffer: contains(imageSource, 'offer') ? imageSource.offer : null
-    sourceSku: contains(imageSource, 'sku') ? imageSource.sku : null
-    sourceVersion: contains(imageSource, 'version') ? imageSource.version : null
-    sourceImageId: contains(imageSource, 'imageId') ? imageSource.imageId : null
-    sourceImageVersionID: contains(imageSource, 'imageVersionID') ? imageSource.imageVersionID : null
+    baseosimage: imageSource.?baseOs ?? null
+    sourcePublisher: imageSource.?publisher ?? null
+    sourceOffer: imageSource.?offer ?? null
+    sourceSku: imageSource.?sku ?? null
+    sourceVersion: imageSource.?version ?? null
+    sourceImageId: imageSource.?imageId ?? null
+    sourceImageVersionID: imageSource.?imageVersionID ?? null
     creationTime: baseTime
   }
 }
@@ -100,11 +100,11 @@ var vnetConfig = {
   subnetId: subnetId
 }
 
-resource ImageBuilderIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
+resource ImageBuilderIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' existing = {
   name: userImageBuilderName
 }
 
-resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-02-14' = {
+resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01' = {
   name: imageTemplateName
   location: location
   tags: tags

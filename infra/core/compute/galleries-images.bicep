@@ -22,11 +22,11 @@ param description string = ''
 @sys.description('Required. Detailed image information to set for the custom image produced by the Azure Image Builder build. Requires publisher, offer, sku')
 param imageDefinitionProperties object
 
-resource gallery 'Microsoft.Compute/galleries@2022-03-03' existing = {
+resource gallery 'Microsoft.Compute/galleries@2024-03-03' existing = {
   name: galleryName
 }
 
-resource galleryImage 'Microsoft.Compute/galleries/images@2022-03-03' = {
+resource galleryImage 'Microsoft.Compute/galleries/images@2024-03-03' = {
   name: name
   location: location
   tags: tags

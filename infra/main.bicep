@@ -42,7 +42,7 @@ var resourceToken = toLower(uniqueString(subscription().id, environmentName, loc
 var keyVaultPatSecretName = 'REPO-PAT'
 
 // Organize resources in a resource group
-resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+resource rg 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: !empty(resourceGroupName) ? resourceGroupName : '${abbrs.resourcesResourceGroups}${environmentName}'
   location: location
 }
@@ -149,8 +149,8 @@ module devBoxCatalog 'core/devbox/devbox-catalog.bicep' = [for (catalog, index) 
     repositoryType: catalog.repositoryType
     uri: catalog.uri
     branch: catalog.branch
-    path: contains(catalog, 'path') ? catalog.path : ''
-    patKeyVaultUri: empty(keyVaultPatSecretUri) ? keyVaultSecret.outputs.secretUri : keyVaultPatSecretUri
+    path: catalog.?path ?? ''
+    patKeyVaultUri: empty(keyVaultPatSecretUri) ? keyVaultSecret!.outputs.secretUri : keyVaultPatSecretUri
   }
 }]
 
